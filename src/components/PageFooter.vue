@@ -1,6 +1,6 @@
 <template>
   <nav class="flex px-20 py-8 bg-black text-white mt-4 relative z-10 justify-between">
-    <img src="../../assets/icons/logo.svg" alt="Company Logo" class="w-28" />  
+    <img src="../assets/icons/logo.svg" alt="Company Logo" class="w-28" />  
     <ul class="flex gap-x-16 float-left">
         <li>Contact</li>
         <li>Terms of Service</li>

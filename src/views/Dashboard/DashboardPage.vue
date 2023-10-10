@@ -10,10 +10,10 @@
 </template>
       
 <script>
-import TopBar from '@/components/Dashboard/TopBar.vue';
-import SideBar from '@/components/Dashboard/SideBar.vue';
-import DashboardItems from '@/components/Dashboard/DashboardItems.vue';
-import PageFooter from '@/components/Home/PageFooter.vue';
+import TopBar from '@/components/TopBar.vue';
+import SideBar from '@/components/SideBar.vue';
+import DashboardItems from '@/components/DashboardItems.vue';
+import PageFooter from '@/components/PageFooter.vue';
 import { useAuthStore } from '@/store/auth.js';
 import { useSchoolStore } from '@/store/school.js'
 
