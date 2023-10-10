@@ -1,0 +1,44 @@
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../fonts/Montserrat/Montserrat-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: bold;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('../fonts/SourceSansPro/SourceSansPro-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: Source Sans Pro;
+}
+.primary-button {
+  color: white;
+  text-align: center;
+  padding-block: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: #3b82f6;
+}
+.primary-button:hover{
+  background-color: #105dd9;
+}
+
+.font-Montserrat{
+  font-family: 'Montserrat';
+  font-weight: 100 !important;
+}
+
+.yellow-text{
+  color:#FFFF56;
+}
+.card{
+  background-color: #223062;
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.43);
+  border: 1px solid #FFFF56;
+  display: flex;
+  align-items: center;
+  }
