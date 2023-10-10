@@ -13,9 +13,9 @@
 </template>
     
 <script>
-import DashboardPolicies from '@/components/Dashboard/PoliciesSection/DashboardPolicies.vue';
-import DashboardGraphs from '@/components/Dashboard/GraphSection/DashboardGraphs.vue';
-import DashboardNotifications from '@/components/Dashboard/NotificationSection/DashboardNotifications.vue';
+import DashboardPolicies from '@/components/PoliciesSection/DashboardPolicies.vue';
+import DashboardGraphs from '@/components/GraphSection/DashboardGraphs.vue';
+import DashboardNotifications from '@/components/NotificationSection/DashboardNotifications.vue';
 import { useAuthStore } from '@/store/auth.js'
 
 export default {

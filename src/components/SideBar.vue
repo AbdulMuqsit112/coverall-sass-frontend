@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import MenuItems from '@/components/Dashboard/MenuItems.vue'
+import MenuItems from '@/components/MenuItems.vue'
 import { useAuthStore } from '@/store/auth.js'
 export default {
   name: "SideBar",

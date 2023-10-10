@@ -11,7 +11,7 @@
       <button class="rounded-lg text-white text-xs bg-blue-400 px-3 py-1">Manage</button>
     </div>
     <div class="flex flex-wrap gap-4">
-      <div class="flex gap-4" v-for="admin in schoolAdmins" :key="admin">
+      <div class="flex gap-3" v-for="admin in schoolAdmins" :key="admin">
         <img src="@/assets/icons/avatar1.png" alt="avatar">
         <div class="">
           <p class="text-sm font-black">{{ admin.first_name + ' '+ admin.last_name }}</p>
