@@ -5,7 +5,7 @@
         <p class="font-Montserrat">District Schools</p>
         <div class="bg-black rounded-xl w-10 h-4/5 flex justify-center gap-1">
           <img src="@/assets/icons/hat.svg" alt="hat">
-          <p class="text-white text-xs mt-[0.2rem]">{{ districtSchools.length }}</p>
+          <p class="text-white text-xs mt-[0.2rem]">{{ totalSchools }}</p>
         </div>
       </div>
       <button class="rounded-lg text-white text-xs bg-blue-400 px-3 py-1">Manage</button>
@@ -30,11 +30,14 @@ export default {
   data(){
     return {
       districtSchools: [],
+      totalSchools: 0
     }
   },
   methods: {
     getDistrictSchools() {
-      this.districtSchools = useSchoolStore().getDistictSchoolsData;
+      let schools = useSchoolStore().getDistictSchoolsData;
+      this.totalSchools = schools.length;
+      this.districtSchools = schools.slice(0, 2);
     },
   },
   mounted(){
