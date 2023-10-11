@@ -1,21 +1,20 @@
 <template>
   <div class="dashboard">
-    <TopBar />
+    <TopBar v-if="isAuthenticated"/>
     <div class="flex container mx-auto gap-6 xl:gap-10 my-3">
-      <SideBar />
-      <DashboardItems/>
+      <SideBar v-if="isAuthenticated"/>
+      <DashboardItems v-if="isAuthenticated"/>
     </div>
-    <PageFooter />
+    <PageFooter v-if="isAuthenticated"/>
   </div>
 </template>
-      
+
 <script>
-import TopBar from '@/components/TopBar.vue';
-import SideBar from '@/components/SideBar.vue';
-import DashboardItems from '@/components/DashboardItems.vue';
-import PageFooter from '@/components/PageFooter.vue';
-import { useAuthStore } from '@/store/auth.js';
-import { useSchoolStore } from '@/store/school.js'
+import TopBar from "@/components/TopBar.vue";
+import SideBar from "@/components/SideBar.vue";
+import DashboardItems from "@/components/DashboardItems.vue";
+import PageFooter from "@/components/PageFooter.vue";
+import { useAuthStore } from "@/store/auth.js";
 
 export default {
   name: "DashboardPage",
@@ -23,69 +22,44 @@ export default {
     TopBar,
     SideBar,
     DashboardItems,
-    PageFooter
+    PageFooter,
   },
   methods: {
-    initiateApiCalls() {
-    this.fetchUser();
-    this.fetchDistrictSchools();
-    this.fetchDSchoolPolicies();
-    this.fetchSchoolAdmins();
-    },
     setToken() {
-      let token = localStorage.getItem('token');
+      let token = localStorage.getItem("token");
       if (token) {
-        this.initiateApiCalls();
+        this.fetchUser();
       } else {
         const urlParams = new URLSearchParams(window.location.search);
-        token = urlParams.get('token');
-        localStorage.setItem('token', token);
-        this.initiateApiCalls();
+        token = urlParams.get("token");
+        localStorage.setItem("token", token);
+        this.fetchUser();
       }
     },
     fetchUser() {
       const authStore = useAuthStore();
       try {
-        authStore.getUserDetails()
+        authStore.getUserDetails();
+        
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     },
-    fetchDistrictSchools(){
-      const schoolStore = useSchoolStore();
-      try {
-        schoolStore.fetchDistrictSchoolsData();
-      } catch (error) {
-        console.error(error)
-      }
-    },
-    fetchDSchoolPolicies(){
-      const schoolStore = useSchoolStore();
-      try {
-        schoolStore.fetchDSchoolPolicies();
-      } catch (error) {
-        console.error(error)
-      }
-    },
-    fetchSchoolAdmins(){
-      const schoolStore = useSchoolStore();
-      try {
-        schoolStore.fetchSchoolAdmins();
-      } catch (error) {
-        console.error(error)
-      }
-    }
   },
   created() {
-    useAuthStore().$reset()
-    useSchoolStore().$reset()
+    useAuthStore().$reset();
     this.setToken();
   },
+  computed: {
+    isAuthenticated(){
+      return useAuthStore().getIsAuthenticated;
+    }
+  }
 };
 </script>
-      
+
 <style>
 .dashboard {
-  background-color: #E7EBF6;
+  background-color: #e7ebf6;
 }
 </style>

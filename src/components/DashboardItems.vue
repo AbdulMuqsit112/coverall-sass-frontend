@@ -17,6 +17,7 @@ import DashboardPolicies from '@/components/PoliciesSection/DashboardPolicies.vu
 import DashboardGraphs from '@/components/GraphSection/DashboardGraphs.vue';
 import DashboardNotifications from '@/components/NotificationSection/DashboardNotifications.vue';
 import { useAuthStore } from '@/store/auth.js'
+import { useSchoolStore } from "@/store/school.js";
 
 export default {
   name: "DashboardItems",
@@ -30,6 +31,55 @@ export default {
       test: true,
     }
   },
+  methods: {
+    initiateApiCalls() {
+      if (this.userRole == 'district admin'){
+        this.fetchDistrictSchools();
+        this.fetchDSchoolPolicies();
+        this.fetchPeopleData('school admin');
+      } else if (this.userRole == 'school admin'){
+        this.fetchSchoolStudents();
+        this.fetchPeopleData('teacher');
+        this.fetchDSchoolPolicies();
+      } else if(this.userRole == 'teacher'){
+        this.fetchSchoolStudents();
+        this.fetchPeopleData('student');
+        this.fetchDSchoolPolicies();
+      }
+    },
+    fetchDistrictSchools() {
+      const schoolStore = useSchoolStore();
+      try {
+        schoolStore.fetchDistrictSchoolsData();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    fetchDSchoolPolicies() {
+      const schoolStore = useSchoolStore();
+      try {
+        schoolStore.fetchDSchoolPolicies();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    fetchPeopleData(userType) {
+      const schoolStore = useSchoolStore();
+      try {
+        schoolStore.fetchPeopleData(userType);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    fetchSchoolStudents(){
+      const schoolStore = useSchoolStore();
+      try {
+        schoolStore.fetchSchoolStudents();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  },
   computed: {
     userName() {
       let user = useAuthStore().getUser;
@@ -38,6 +88,9 @@ export default {
     userRole() {
       return useAuthStore().getUser.role;
     },
+  },
+  mounted(){
+    this.initiateApiCalls();
   }
 };
 </script>

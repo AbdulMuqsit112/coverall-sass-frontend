@@ -34,7 +34,6 @@ export const useAuthStore = defineStore('auth', {
     },
 
     logout() {
-      // Simulating logout logic
       this.isAuthenticated = false;
       this.user = {
           firstName: '',
@@ -46,5 +45,6 @@ export const useAuthStore = defineStore('auth', {
   },
   getters: {
     getUser: (state) =>state.user,
+    getIsAuthenticated: (state) => state.isAuthenticated,
   },
 });

@@ -1,26 +1,26 @@
 <template>
   <div class="flex flex-wrap flex-col gap-6">
-    <SchoolAdmin v-if="isSchoolAdminsLoaded"/>
+    <PeopleCard v-if="IsPeopleDataLoaded"/>
     <PoliciesBoard v-if="isPoliciesLoaded"/>
   </div>
 </template>
         
 <script>
-import SchoolAdmin from './SchoolAdmin.vue';
+import PeopleCard from './PeopleCard.vue';
 import PoliciesBoard from './PoliciesBoard.vue';
 import { useSchoolStore } from '@/store/school';
 export default {
   name: "DashboardPolicies",
   components: {
     PoliciesBoard,
-    SchoolAdmin
+    PeopleCard
 },
 computed: {
   isPoliciesLoaded(){
     return useSchoolStore().getIsDSchoolPolicyLoaded;
   },
-  isSchoolAdminsLoaded(){
-    return useSchoolStore().getIsSchoolAdminsLoaded
+  IsPeopleDataLoaded(){
+    return useSchoolStore().getIsPeopleDataLoaded;
   }
 }
 };
