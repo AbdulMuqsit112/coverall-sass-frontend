@@ -4,7 +4,7 @@ const routes = [
     path: '/',
     exact: true,
     name: 'DashBoardPage',
-    component: () => import("@/views/Dashboard/DashboardPage.vue"),
+    component: () => import("@/views/DashboardPage.vue"),
     props: (route) => ({
       token: route.query.token,
     }),
