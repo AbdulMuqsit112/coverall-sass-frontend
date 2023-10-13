@@ -1,7 +1,7 @@
 <template>
-  <div class="dashboard">
+  <div class="dashboard flex flex-col gap-8">
     <TopBar/>
-    <div class="flex container mx-auto gap-6 xl:gap-10 my-3">
+    <div class="flex container mx-auto gap-6 xl:gap-10 my-12">
       <SideBar/>
       <router-view></router-view>
     </div>

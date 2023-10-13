@@ -6,10 +6,13 @@ export const useSchoolStore = defineStore('school', {
     dSchoolPolicies: [],
     PeopleData: [],
     schoolStudents: [],
+    studentClassTeachers: [],
     isDSchoolsLoaded: false,
     isDSchoolPolicyLoaded: false,
     isPeopleDataLoaded: false,
     isSchoolStudentsLoaded: false,
+    isStudentClassTeachersLoaded: false
+
   }),
   actions: {
     async fetchDistrictSchoolsData() {
@@ -60,6 +63,18 @@ export const useSchoolStore = defineStore('school', {
         console.error('Error fetching School Students:', error);
       }
     },
+    async fetchStudentsClassTeachers() {
+      this.isStudentClassTeachersLoaded = false;
+      try {
+        const response = await this.$http.get('/school/getStudentsClassTeachers');
+        if (response.status == 200) {
+          this.studentClassTeachers = response.data;
+          this.isStudentClassTeachersLoaded = true;
+        }
+      } catch (error) {
+        console.error('Error fetching Students Class Teachers:', error);
+      }
+    },
   },
   getters: {
     getDistictSchoolsData: (state) => state.districtSchools,
@@ -70,5 +85,7 @@ export const useSchoolStore = defineStore('school', {
     getIsPeopleDataLoaded: (state) => state.isPeopleDataLoaded,
     getSchoolStudents: (state) => state.schoolStudents,
     getIsSchoolStudentsLoaded: (state) => state.isSchoolStudentsLoaded,
+    getStudentClassTeachers: (state) => state.studentClassTeachers,
+    getIsStudentClassTeachersLoaded: (state) => state.isStudentClassTeachersLoaded,
   },
 });

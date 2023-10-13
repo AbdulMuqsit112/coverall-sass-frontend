@@ -1,24 +1,120 @@
 <template>
-    <DashboardItems v-if="isAuthenticated"/>
+  <div class="main-tile flex flex-wrap gap-4 p-6 w-[90vw]">
+    <div class="block textbox">
+      <p class="font-semibold text-lg">{{ userRole }} Dashboard</p>
+      <p class="font-Montserrat text-3xl">Welcome, {{ userName }}</p>
+    </div>
+    <DashboardGraphs v-if="test"/>
+    <div class="flex flex-wrap justify-center gap-8 mt-4">
+      <DashboardNotifications/>
+      <DashboardPolicies/>
+    </div>
+  </div>
 </template>
-
+    
 <script>
-import DashboardItems from "@/components/DashboardItems.vue";
-import { useAuthStore } from "@/store/auth.js";
+import DashboardPolicies from '@/components/Dashboard/PoliciesSection/DashboardPolicies.vue';
+import DashboardGraphs from '@/components/Dashboard/GraphSection/DashboardGraphs.vue';
+import DashboardNotifications from '@/components/Dashboard/NotificationSection/DashboardNotifications.vue';
+import { useAuthStore } from '@/store/auth.js'
+import { useSchoolStore } from "@/store/school.js";
 
 export default {
   name: "DashboardPage",
-  components: {    
-    DashboardItems,
+  components: {
+    DashboardGraphs,
+    DashboardNotifications,
+    DashboardPolicies
+  },
+  data(){
+    return{
+      test: true,
+    }
+  },
+  methods: {
+    initiateApiCalls() {
+      if (this.userRole == 'district admin'){
+        this.fetchDistrictSchools();
+        this.fetchDSchoolPolicies();
+        this.fetchPeopleData('school admin');
+      } else if (this.userRole == 'school admin'){
+        this.fetchSchoolStudents();
+        this.fetchPeopleData('teacher');
+        this.fetchDSchoolPolicies();
+      } else if(this.userRole == 'teacher'){
+        this.fetchSchoolStudents();
+        this.fetchPeopleData('student');
+        this.fetchDSchoolPolicies();
+      } else if (this.userRole == 'student'){
+        this.fetchStudentsClassTeachers()
+      }
+    },
+    fetchDistrictSchools() {
+      const schoolStore = useSchoolStore();
+      try {
+        schoolStore.fetchDistrictSchoolsData();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    fetchDSchoolPolicies() {
+      const schoolStore = useSchoolStore();
+      try {
+        schoolStore.fetchDSchoolPolicies();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    fetchPeopleData(userType) {
+      const schoolStore = useSchoolStore();
+      try {
+        schoolStore.fetchPeopleData(userType);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    fetchSchoolStudents(){
+      const schoolStore = useSchoolStore();
+      try {
+        schoolStore.fetchSchoolStudents();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    fetchStudentsClassTeachers(){
+      const schoolStore = useSchoolStore();
+      try {
+        schoolStore.fetchStudentsClassTeachers();
+      } catch (error) {
+        console.error(error);
+      }
+    }
   },
   computed: {
-    isAuthenticated(){
-      return useAuthStore().getIsAuthenticated;
-    }
+    userName() {
+      let user = useAuthStore().getUser;
+      return user.firstName + ' ' + user.lastName
+    },
+    userRole() {
+      return useAuthStore().getUser.role;
+    },
+  },
+  mounted(){
+    this.initiateApiCalls();
   }
 };
 </script>
-
+    
 <style>
+.tile {
+  background-color: white;
+  padding-block: 0.5rem;
+  box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.1), 2px 2px 4px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+}
+.textbox{
+  width: inherit;
+}
 
 </style>
+    

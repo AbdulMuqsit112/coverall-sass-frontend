@@ -3,7 +3,7 @@
         <ul>
           <li class="sidelinks">
             <img src="@/assets/icons/sidebarIcon1.svg" alt="side bar icon">
-            <router-link to="/dashboard" active-class="text-xl font-extrabold">
+            <router-link to="/" active-class="text-xl font-extrabold">
               Dashboard
             </router-link>
           </li>

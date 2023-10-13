@@ -7,8 +7,9 @@
       <button class="rounded-lg text-white text-xs bg-blue-400 px-3 py-1">Manage</button>
     </div>
     <div class="flex flex-wrap gap-12">
-      <div class="flex gap-3" v-for="st in schoolStudents" :key="st">
-        <div class="bg-transparent border rounded-full w-10 h-10 flex justify-center items-center">{{ st.grade_name[0] }}</div>
+      <div class="flex gap-3" v-for="st in data" :key="st">
+        <div class="bg-transparent border rounded-full w-10 h-10 flex justify-center items-center">{{ st.grade_name[0] }}
+        </div>
         <div class="">
           <p class="text-sm font-black">{{ st.grade_name }}</p>
           <p class="text-xs font-light">{{ st.students_count }}</p>
@@ -29,20 +30,31 @@ export default {
   name: "SchoolGrade",
   data() {
     return {
-      schoolStudents: [],
-      TextTitle: 'School Students'
+      data: [],
+      TextTitle: ''
     }
   },
   methods: {
     getDistrictSchools() {
       let students = useSchoolStore().getSchoolStudents;
-      this.schoolStudents = students.slice(0, 4);
+      this.data = students.slice(0, 4);
+    },
+    getStudentClassTeacher(){
+      this.data = useSchoolStore().getStudentClassTeachers;
     },
   },
   mounted() {
-    this.getDistrictSchools();
     let role = useAuthStore().getUser.role;
-    if (role == "teacher") this.TextTitle = 'Grade/Class'
+    if (role == 'school admin') {
+      this.TextTitle = 'School Students';
+      this.getDistrictSchools();
+    } else if (role == 'teacher') {
+      this.TextTitle = 'Grade/Class';
+      this.getDistrictSchools();
+    } else {
+      this.TextTitle = 'Grade/Class';
+
+    }
   }
 
 };
