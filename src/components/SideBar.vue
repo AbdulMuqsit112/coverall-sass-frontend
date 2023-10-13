@@ -1,5 +1,6 @@
 <template>
   <div class="sidebar flex flex-col float-left gap-10 w-60 xl:w-72 xl:gap-12 h-[90rem] xl:h-auto">
+    <router-link to="/profile">
     <div class="flex flex-col items-center">
       <div class="rounded-full">
         <img src="@/assets/icons/Avatar.svg" alt="avatar">
@@ -11,6 +12,7 @@
         </p>
       </div>
     </div>
+  </router-link>
     <MenuItems />
   </div>
 </template>

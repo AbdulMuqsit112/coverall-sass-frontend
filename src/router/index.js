@@ -9,6 +9,12 @@ const routes = [
       token: route.query.token,
     }),
   },
+  {
+    path: '/profile',
+    exact: true,
+    name: 'ProfilePage',
+    component: () => import("@/views/ProfilePage.vue"),
+  },
 
 ];
 

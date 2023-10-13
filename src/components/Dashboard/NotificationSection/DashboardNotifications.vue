@@ -2,7 +2,7 @@
   <div class="flex flex-wrap flex-col gap-6">
     <NotificationBoard />
     <SchoolDistrict v-if="IsDSchoolLoaded" />
-    <SchoolGrade v-if="isSchoolStudentsLoaded"/>
+    <SchoolGrade v-if="isSchoolStudentsLoaded || isStudentClassTeachersLoaded"/>
     <PublishedContent v-if="showContent"/>
   </div>
 </template>
@@ -30,6 +30,9 @@ export default {
     },
     isSchoolStudentsLoaded(){
       return useSchoolStore().getIsSchoolStudentsLoaded;
+    },
+    isStudentClassTeachersLoaded(){
+      return useSchoolStore().getIsStudentClassTeachersLoaded;
     }
   }
 };
