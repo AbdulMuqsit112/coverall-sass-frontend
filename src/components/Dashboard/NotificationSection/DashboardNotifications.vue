@@ -1,29 +1,24 @@
 <template>
-  <div class="flex flex-wrap flex-col gap-6">
+  <div :class="{'flex-wrap': userRole === 'student', 'flex-col': userRole !== 'student'}" class="flex gap-6">
     <NotificationBoard />
     <SchoolDistrict v-if="IsDSchoolLoaded" />
     <SchoolGrade v-if="isSchoolStudentsLoaded || isStudentClassTeachersLoaded"/>
-    <PublishedContent v-if="showContent"/>
   </div>
 </template>
 <script>
 import { useSchoolStore } from '@/store/school.js'
+import { useAuthStore } from '@/store/auth';
 import SchoolDistrict from './SchoolDistrict.vue'
 import NotificationBoard from "./NotificationBoard.vue";
 import SchoolGrade from './SchoolGrade.vue';
-import PublishedContent from './PublishedContent.vue';
 export default {
   name: "DashboardNotifications",
   components: {
     NotificationBoard,
     SchoolDistrict,
     SchoolGrade,
-    PublishedContent
   },
-  data(){
-    return{
-      showContent: false
-  }},
+  
   computed: {
     IsDSchoolLoaded() {
       return useSchoolStore().getIsDSchoolLoaded;
@@ -33,6 +28,9 @@ export default {
     },
     isStudentClassTeachersLoaded(){
       return useSchoolStore().getIsStudentClassTeachersLoaded;
+    },
+    userRole(){
+      return useAuthStore().getUser.role;
     }
   }
 };

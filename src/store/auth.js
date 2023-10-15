@@ -12,6 +12,13 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async getUserDetails() {
       try {
+        let token = localStorage.getItem("token")
+        console.log("Token is :", token);
+        if (!token){
+          const urlParams = new URLSearchParams(window.location.search);
+          token = urlParams.get("token");
+          localStorage.setItem("token", token);
+        }
         const response = await this.$http.get('user/getUserInfo');
         if (response.status == 200){
           const fetchedUser = response.data;
@@ -30,10 +37,12 @@ export const useAuthStore = defineStore('auth', {
           role: ''
         };
         this.isAuthenticated = false;
+        // localStorage.removeItem("token");
       }
     },
 
     logout() {
+      localStorage.removeItem("token");
       this.isAuthenticated = false;
       this.user = {
           firstName: '',

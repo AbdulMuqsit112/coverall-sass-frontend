@@ -4,18 +4,20 @@
       <p class="font-semibold text-lg">{{ userRole }} Dashboard</p>
       <p class="font-Montserrat text-3xl">Welcome, {{ userName }}</p>
     </div>
-    <DashboardGraphs v-if="test"/>
-    <div class="flex flex-wrap justify-center gap-8 mt-4">
+    <DashboardGraphs v-if="userRole != 'student'"/>
+    <div :class="{'justify-center': userRole != 'content approver',}" class="flex flex-wrap gap-8 mt-4">
       <DashboardNotifications/>
       <DashboardPolicies/>
+    <PublishedContent v-if="(userRole == 'student' || userRole == 'content approver') && (isPublishedContent || isContentAwaitApproval)"/>
     </div>
   </div>
 </template>
-    
+
 <script>
 import DashboardPolicies from '@/components/Dashboard/PoliciesSection/DashboardPolicies.vue';
 import DashboardGraphs from '@/components/Dashboard/GraphSection/DashboardGraphs.vue';
 import DashboardNotifications from '@/components/Dashboard/NotificationSection/DashboardNotifications.vue';
+import PublishedContent from '@/components/Dashboard/PublishedContent.vue';
 import { useAuthStore } from '@/store/auth.js'
 import { useSchoolStore } from "@/store/school.js";
 
@@ -24,12 +26,8 @@ export default {
   components: {
     DashboardGraphs,
     DashboardNotifications,
-    DashboardPolicies
-  },
-  data(){
-    return{
-      test: true,
-    }
+    DashboardPolicies,
+    PublishedContent
   },
   methods: {
     initiateApiCalls() {
@@ -47,6 +45,10 @@ export default {
         this.fetchDSchoolPolicies();
       } else if (this.userRole == 'student'){
         this.fetchStudentsClassTeachers()
+        this.fetchPublishedContent();
+      } else if (this.userRole == 'content approver'){
+        this.fetchDSchoolPolicies();
+        this.fetchContentAwaitApproval();
       }
     },
     fetchDistrictSchools() {
@@ -88,6 +90,22 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+    fetchPublishedContent(){
+      const schoolStore = useSchoolStore();
+      try {
+        schoolStore.fetchPublishedContent();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    fetchContentAwaitApproval(){
+      const schoolStore = useSchoolStore();
+      try {
+        schoolStore.fetchContentAwaitingApproval();
+      } catch (error) {
+        console.error(error);
+      }
     }
   },
   computed: {
@@ -98,6 +116,12 @@ export default {
     userRole() {
       return useAuthStore().getUser.role;
     },
+    isPublishedContent(){
+      return useSchoolStore().getIsPublishedContentLoaded;
+    },
+    isContentAwaitApproval(){
+      return useSchoolStore().getIsContentAwaitApprovalLoaded;
+    }
   },
   mounted(){
     this.initiateApiCalls();

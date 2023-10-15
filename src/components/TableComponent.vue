@@ -1,17 +1,20 @@
 <template>
-  <div class="overflow-x-auto w-full p-6 bg-white">
-    <table class="table w-full table-fixed">
+  <div class="overflow-x-auto p-6 bg-white rounded-lg">
+    <table class="table table-fixed">
       <thead>
         <tr>
-          <th v-for="column in columns" :key="column" class="px-6 py-2 font-black text-left">{{ column }}</th>
+          <th v-for="column in columns" :key="column" class="px-6 py-2 font-black text-left">{{ computedColName(column) }}
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in data" :key="item.id">
           <td v-for="column in columns" :key="column" class="px-6">
             <template v-if="isDropdownColumn(column)">
-              <select v-model="item[column]" :class="getDropdownClass(item[column])">
-                <option v-for="option in getDropdownOptions(column)" :key="option">{{ option }}</option>
+              <select v-model="item[column]" :class="getDropdownClass(item[column])" @change="updateDropdown(item)">
+                <option v-for="option in getDropdownOptions(column)" :key="option.value" :value="option.value">
+                  {{ option.label }}
+                </option>
               </select>
             </template>
             <template v-else-if="isEditableColumn(column)">
@@ -67,20 +70,12 @@ export default {
     isEditableColumn(column) {
       return this.editableColumns.includes(column);
     },
-    getDropdownClass(value) {
-      if (value === "Approved") {
-        return "px-2 py-2 block text-xs rounded-lg bg-green-200 text-green-500";
-      } else if (value === "Denied") {
-        return "px-2 py-2 block text-xs rounded-lg bg-red-100 text-red-500";
-      } else if (value === "waiting") {
-        return "px-2 py-2 block text-xs rounded-lg bg-gray-200 text-gray-400";
-      } else {
-        return "py-2 block text-xs border-none text-black";
-      }
-    },
     getDropdownOptions(column) {
-      if (column === "status") {
-        return ["Approved", "Denied", "waiting"];
+      if (column === "subscription_status") {
+        return [
+          { label: "Approved", value: true },
+          { label: "Denied", value: false }
+        ];
       } else if (column === "type") {
         return ["District", "Regular"];
       } else {
@@ -97,9 +92,30 @@ export default {
         });
       }
     },
+    computedColName(colName) {
+      switch (colName) {
+        case "subscription_status":
+          return 'Status'
+        case "subscription_date":
+          return "Date"
+        default:
+          return colName.charAt(0).toUpperCase() + colName.slice(1);
+      }
+    },
+    getDropdownClass(value) {
+        if (value === true) {
+          return "px-2 py-2 block text-xs rounded-lg bg-green-200 text-green-500";
+        } else if (value === false) {
+          return "px-2 py-2 block text-xs rounded-lg bg-red-100 text-red-500";
+        } else {
+          return "py-2 block text-xs border-none text-black";
+        }
+    },
+    updateDropdown(item){
+      return item;
+    },
   },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
