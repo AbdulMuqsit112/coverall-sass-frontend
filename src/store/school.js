@@ -7,11 +7,15 @@ export const useSchoolStore = defineStore('school', {
     PeopleData: [],
     schoolStudents: [],
     studentClassTeachers: [],
+    publishedContent: [],
+    contentAwaitApproval: [],
     isDSchoolsLoaded: false,
     isDSchoolPolicyLoaded: false,
     isPeopleDataLoaded: false,
     isSchoolStudentsLoaded: false,
-    isStudentClassTeachersLoaded: false
+    isStudentClassTeachersLoaded: false,
+    isPublishedContentLoaded: false,
+    isContentAwaitApprovalLoaded: false,
 
   }),
   actions: {
@@ -66,7 +70,7 @@ export const useSchoolStore = defineStore('school', {
     async fetchStudentsClassTeachers() {
       this.isStudentClassTeachersLoaded = false;
       try {
-        const response = await this.$http.get('/school/getStudentsClassTeachers');
+        const response = await this.$http.get('school/getStudentsClassTeachers');
         if (response.status == 200) {
           this.studentClassTeachers = response.data;
           this.isStudentClassTeachersLoaded = true;
@@ -75,6 +79,31 @@ export const useSchoolStore = defineStore('school', {
         console.error('Error fetching Students Class Teachers:', error);
       }
     },
+    async fetchPublishedContent() {
+      this.isPublishedContentLoaded = false;
+      try {
+        const response = await this.$http.get('video/getVideos/students');
+        if (response.status == 200) {
+          this.publishedContent = response.data;
+          this.isPublishedContentLoaded = true;
+        }
+      } catch (error) {
+        console.error('Error fetching Published Content:', error);
+      }
+    },
+    async fetchContentAwaitingApproval() {
+      this.isContentAwaitApprovalLoaded = false;
+      try {
+        const response = await this.$http.get('video/getVideos/contentApprovers/contentWaitingApproval');
+        if (response.status == 200) {
+          this.contentAwaitApproval = response.data;
+          this.isContentAwaitApprovalLoaded = true;
+        }
+      } catch (error) {
+        console.error('Error fetching Content Awaiting Approval:', error);
+      }
+    },
+
   },
   getters: {
     getDistictSchoolsData: (state) => state.districtSchools,
@@ -87,5 +116,9 @@ export const useSchoolStore = defineStore('school', {
     getIsSchoolStudentsLoaded: (state) => state.isSchoolStudentsLoaded,
     getStudentClassTeachers: (state) => state.studentClassTeachers,
     getIsStudentClassTeachersLoaded: (state) => state.isStudentClassTeachersLoaded,
+    getPublishedContent: (state) => state.publishedContent,
+    getIsPublishedContentLoaded: (state) => state.isPublishedContentLoaded,
+    getContentAwaitApproval: (state) => state.contentAwaitApproval,
+    getIsContentAwaitApprovalLoaded: (state) => state.isContentAwaitApprovalLoaded,
   },
 });

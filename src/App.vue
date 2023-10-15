@@ -23,17 +23,6 @@ export default {
     PageFooter
   },
   methods: {
-    setToken() {
-      let token = localStorage.getItem("token");
-      if (token) {
-        this.fetchUser();
-      } else {
-        const urlParams = new URLSearchParams(window.location.search);
-        token = urlParams.get("token");
-        localStorage.setItem("token", token);
-        this.fetchUser();
-      }
-    },
     fetchUser() {
       const authStore = useAuthStore();
       try {
@@ -45,8 +34,13 @@ export default {
     },
   },
   created() {
-    this.setToken();
+    this.fetchUser();
   },
+  computed: {
+    isAuthenticated(){
+      return useAuthStore().getIsAuthenticated;
+    }
+  }
 }
 </script>
 
