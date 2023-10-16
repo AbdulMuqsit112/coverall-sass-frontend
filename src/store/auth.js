@@ -37,7 +37,6 @@ export const useAuthStore = defineStore('auth', {
           role: ''
         };
         this.isAuthenticated = false;
-        // localStorage.removeItem("token");
       }
     },
 

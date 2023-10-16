@@ -3,7 +3,7 @@
     <TopBar/>
     <div class="flex container mx-auto gap-6 xl:gap-10 my-12">
       <SideBar/>
-      <router-view></router-view>
+      <router-view v-if="isAuthenticated"></router-view>
     </div>
     <PageFooter/>
   </div>

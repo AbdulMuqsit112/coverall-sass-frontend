@@ -104,6 +104,18 @@ export const useSchoolStore = defineStore('school', {
       }
     },
 
+    // Delete Request
+    async deleteDistrictSchool(id) {
+      try {
+        const response = await this.$http.delete('school/delete', {params: { school_id: id,},});
+        if (response.status == 200) {
+          await this.fetchDistrictSchoolsData();
+        }
+      } catch (error) {
+        console.error('Error Deleting School:', error);
+      }
+    },
+
   },
   getters: {
     getDistictSchoolsData: (state) => state.districtSchools,
