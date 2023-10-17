@@ -21,6 +21,12 @@ const routes = [
     name: 'SchoolPage',
     component: () => import("@/views/SchoolPage.vue"),
   },
+  {
+    path: '/admin',
+    exact: true,
+    name: 'AdminPage',
+    component: () => import("@/views/AdminPage.vue"),
+  },
 
 ];
 

@@ -15,7 +15,7 @@
             class="absolute right-3 top-4 transform -translate-y-1/2"
           />
         </div>
-        <button class="bg-blue-400 text-white text-sm h-7 px-6 rounded-lg">
+        <button v-if="isAdd" class="bg-blue-400 text-white text-sm h-7 px-6 rounded-lg" @click="addRecord()">
           Add +
         </button>
       </div>
@@ -36,22 +36,24 @@
         <tr v-for="item in filteredData" :key="item.id">
           <td v-for="column in columns" :key="column" class="px-2 text-center">
             <template v-if="isDropdownColumn(column)">
-              <select
-                v-model="item[column]"
-                :class="getDropdownClass(item[column])"
-                @change="updateDropdown(item)"
-              >
-                <option
-                  v-for="option in getDropdownOptions(column)"
-                  :key="option"
-                  :value="option"
+              <div class="flex justify-center">
+                <select
+                  v-model="item[column]"
+                  :class="getDropdownClass(item[column])"
+                  @change="updateRecord(item)"
                 >
-                  {{
-                    option.charAt(0).toUpperCase() +
-                    option.slice(1).toLowerCase()
-                  }}
-                </option>
-              </select>
+                  <option
+                    v-for="option in getDropdownOptions(column)"
+                    :key="option"
+                    :value="option"
+                  >
+                    {{
+                      option.charAt(0).toUpperCase() +
+                      option.slice(1).toLowerCase()
+                    }}
+                  </option>
+                </select>
+              </div>
             </template>
             <template v-else-if="isStateColumn(column)">
               <div class="flex justify-center">
@@ -67,6 +69,7 @@
                   v-model="item[column]"
                   class="text-xs border-none text-center bg-white w-1/2"
                   disabled
+                  @blur="updateRecord(item)"
                 />
                 <img
                   src="@/assets/icons/pencil.svg"
@@ -77,7 +80,7 @@
               </div>
             </template>
             <template v-else>
-              <span>{{ item[column] }}</span>
+              <span class="w-1/2 text-xs">{{ item[column] }}</span>
             </template>
           </td>
           <td v-if="isButton">
@@ -134,6 +137,10 @@ export default {
     title: {
       type: String,
     },
+    isAdd: {
+      type: Boolean,
+      default: () => true,
+    }
   },
   data() {
     return {
@@ -151,7 +158,7 @@ export default {
       return this.stateColumns.includes(column);
     },
     getDropdownOptions(column) {
-      if (column === "subscription_status") {
+      if (column == "subscription_status" || column == 'status') {
         return ["disabled", "enabled"];
       } else if (column === "type") {
         return ["District", "Regular"];
@@ -177,6 +184,8 @@ export default {
           return "Date";
         case "school_type":
           return "Type";
+        case "full_name":
+          return "Name";
         default:
           return colName.charAt(0).toUpperCase() + colName.slice(1);
       }
@@ -190,8 +199,8 @@ export default {
         return "py-2 block text-xs border-none text-black";
       }
     },
-    updateDropdown(item) {
-      return item;
+    updateRecord(record) {
+      this.$emit("update-record", record);
     },
     deleteRecord(record) {
       const confirmDelete = confirm(
@@ -200,6 +209,9 @@ export default {
       if (confirmDelete) {
         this.$emit("delete-record", record.id);
       }
+    },
+    addRecord(){
+      this.$emit("add-record");
     },
   },
   computed: {

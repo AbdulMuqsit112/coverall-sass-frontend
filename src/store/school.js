@@ -46,7 +46,7 @@ export const useSchoolStore = defineStore('school', {
     async fetchPeopleData(userType) {
       this.isPeopleDataLoaded = false;
       try {
-        const response = await this.$http.get('user/getUserInfo/all', {params: { user_type: userType,},});
+        const response = await this.$http.get('user/getUserInfo/all', {params: { user_type: userType},});
         if (response.status == 200) {
           this.PeopleData = response.data;
           this.isPeopleDataLoaded = true;
@@ -104,7 +104,7 @@ export const useSchoolStore = defineStore('school', {
       }
     },
 
-    // Delete Request
+    // Delete Requests
     async deleteDistrictSchool(id) {
       try {
         const response = await this.$http.delete('school/delete', {params: { school_id: id,},});
@@ -115,6 +115,50 @@ export const useSchoolStore = defineStore('school', {
         console.error('Error Deleting School:', error);
       }
     },
+    async deletePerson(id) {
+      try {
+        const response = await this.$http.delete('user/delete', {params: { user_id: id,},});
+        if (response.status == 200) {
+          await this.fetchDistrictSchoolsData();
+        }
+      } catch (error) {
+        console.error('Error Deleting Person:', error);
+      }
+    },
+
+    // Update Requests
+    async updateDistrictSchool(school) {
+      try {
+        const response = await this.$http.put('school/update', school);
+        if (response.status == 200) {
+          await this.fetchDistrictSchoolsData();
+        }
+      } catch (error) {
+        console.error('Error Updating School:', error);
+      }
+    },
+    async updatePerson(person) {
+      try {
+        const response = await this.$http.put('/user/update', person);
+        if (response.status == 200) {
+          await this.fetchPeopleData('school admin');
+        }
+      } catch (error) {
+        console.error('Error Updating Person:', error);
+      }
+    },
+
+    // Create Requests
+    async createDistrictSchool(school) {
+      try {
+        const response = await this.$http.post('school/create/districtAdmin', school);
+        if (response.status == 200) {
+          await this.fetchDistrictSchoolsData();
+        }
+      } catch (error) {
+        console.error('Error Creating School:', error);
+      }
+    }
 
   },
   getters: {
