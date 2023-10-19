@@ -6,7 +6,9 @@ export const useAuthStore = defineStore('auth', {
       firstName: '',
       lastName: '',
       email: '',
-      role: ''
+      role: '',
+      districtId: '',
+      schoolId: ''
     },
   }),
   actions: {
@@ -26,6 +28,8 @@ export const useAuthStore = defineStore('auth', {
           this.user.lastName = fetchedUser.last_name;
           this.user.email = fetchedUser.email;
           this.user.role = fetchedUser.role;
+          this.user.districtId =  fetchedUser.district_id,
+          this.user.schoolId =  fetchedUser.school_id,
           this.isAuthenticated = true;
         }
       } catch (error) {
@@ -34,7 +38,9 @@ export const useAuthStore = defineStore('auth', {
           firstName: '',
           lastName: '',
           email: '',
-          role: ''
+          role: '',
+          districtId: '',
+          schoolId: ''
         };
         this.isAuthenticated = false;
       }
@@ -47,7 +53,9 @@ export const useAuthStore = defineStore('auth', {
           firstName: '',
           lastName: '',
           email: '',
-          role: ''
+          role: '',
+          districtId: '',
+          schoolId: ''
         };
     },
   },

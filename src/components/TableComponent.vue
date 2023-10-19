@@ -40,7 +40,7 @@
                 <select
                   v-model="item[column]"
                   :class="getDropdownClass(item[column])"
-                  @change="updateRecord(item)"
+                  @change="updateRecord(item, column)"
                 >
                   <option
                     v-for="option in getDropdownOptions(column)"
@@ -83,13 +83,6 @@
               <span class="w-1/2 text-xs">{{ item[column] }}</span>
             </template>
           </td>
-          <td v-if="isButton">
-            <button
-              class="px-3 py-2 text-sm my-1 rounded-lg bg-blue-400 text-white"
-            >
-              View
-            </button>
-          </td>
           <td v-if="isDelete" class="flex justify-center mt-3">
             <img
               src="@/assets/icons/bin.svg"
@@ -128,9 +121,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    isButton: {
-      type: Boolean,
-    },
     isDelete: {
       type: Boolean,
     },
@@ -140,6 +130,10 @@ export default {
     isAdd: {
       type: Boolean,
       default: () => true,
+    },
+    gradeData: {
+      type: Array,
+      default: () => [],
     }
   },
   data() {
@@ -162,8 +156,12 @@ export default {
         return ["disabled", "enabled"];
       } else if (column === "type") {
         return ["District", "Regular"];
+      } else if (column == "policy_status"){
+        return ["blacklist", "whitelist"];
+      } else if (column == "grade_name"){
+        return this.gradeData;
       } else {
-        return [];
+          return [];
       }
     },
     toggleInput(event) {
@@ -186,21 +184,32 @@ export default {
           return "Type";
         case "full_name":
           return "Name";
+        case "policy_type":
+          return "Type";
+        case "policy_status":
+          return "Status";
+        case "grade_name":
+          return "Grades";
         default:
           return colName.charAt(0).toUpperCase() + colName.slice(1);
       }
     },
     getDropdownClass(value) {
-      if (value == "enabled") {
+      if (value == "enabled" || value == "whitelist") {
         return "px-2 py-2 my-1 block text-xs rounded-lg bg-green-200 text-green-500";
-      } else if (value == "disabled") {
+      } else if (value == "disabled" || value == "blacklist") {
         return "px-2 py-2 my-1 block text-xs rounded-lg bg-red-100 text-red-500";
       } else {
         return "py-2 block text-xs border-none text-black";
       }
     },
-    updateRecord(record) {
-      this.$emit("update-record", record);
+    
+    updateRecord(record, column) {
+      if (column == "grade_name"){
+        this.$emit("update-grades",record)
+      } else {
+        this.$emit("update-record", record);
+      }
     },
     deleteRecord(record) {
       const confirmDelete = confirm(

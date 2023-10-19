@@ -38,7 +38,7 @@ export default {
       useSchoolStore().deletePerson(id);
     },
     updateAdmin(admin) {
-      useSchoolStore().updatePerson({ ...admin });
+      useSchoolStore().updatePerson({ ...admin }, 'school admin');
     },
   },
   created() {
