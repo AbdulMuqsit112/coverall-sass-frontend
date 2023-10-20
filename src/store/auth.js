@@ -6,7 +6,9 @@ export const useAuthStore = defineStore('auth', {
       firstName: '',
       lastName: '',
       email: '',
-      role: ''
+      role: '',
+      districtId: '',
+      schoolId: ''
     },
   }),
   actions: {
@@ -26,6 +28,8 @@ export const useAuthStore = defineStore('auth', {
           this.user.lastName = fetchedUser.last_name;
           this.user.email = fetchedUser.email;
           this.user.role = fetchedUser.role;
+          this.user.districtId =  fetchedUser.district_id,
+          this.user.schoolId =  fetchedUser.school_id,
           this.isAuthenticated = true;
         }
       } catch (error) {
@@ -34,10 +38,11 @@ export const useAuthStore = defineStore('auth', {
           firstName: '',
           lastName: '',
           email: '',
-          role: ''
+          role: '',
+          districtId: '',
+          schoolId: ''
         };
         this.isAuthenticated = false;
-        // localStorage.removeItem("token");
       }
     },
 
@@ -48,9 +53,25 @@ export const useAuthStore = defineStore('auth', {
           firstName: '',
           lastName: '',
           email: '',
-          role: ''
+          role: '',
+          districtId: '',
+          schoolId: ''
         };
     },
+    async resetPassword(userID){
+      try {
+        const params = new URLSearchParams();
+        params.append('user_id', userID);
+        const response = await this.$http.post('user/schoolAdmin/passwordReset', null, {
+          params: params
+        });
+        if (response.status == 200) {
+          console.error('Password Reset Successful');
+        }
+      } catch (error) {
+        console.error('Error Resetting Password:', error);
+      }
+    }
   },
   getters: {
     getUser: (state) =>state.user,

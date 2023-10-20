@@ -9,6 +9,7 @@ export const useSchoolStore = defineStore('school', {
     studentClassTeachers: [],
     publishedContent: [],
     contentAwaitApproval: [],
+    gradesData: [],
     isDSchoolsLoaded: false,
     isDSchoolPolicyLoaded: false,
     isPeopleDataLoaded: false,
@@ -16,6 +17,7 @@ export const useSchoolStore = defineStore('school', {
     isStudentClassTeachersLoaded: false,
     isPublishedContentLoaded: false,
     isContentAwaitApprovalLoaded: false,
+    isGradesDataLoaded: false
 
   }),
   actions: {
@@ -46,7 +48,7 @@ export const useSchoolStore = defineStore('school', {
     async fetchPeopleData(userType) {
       this.isPeopleDataLoaded = false;
       try {
-        const response = await this.$http.get('user/getUserInfo/all', {params: { user_type: userType,},});
+        const response = await this.$http.get('user/getUserInfo/all', {params: { user_type: userType},});
         if (response.status == 200) {
           this.PeopleData = response.data;
           this.isPeopleDataLoaded = true;
@@ -103,6 +105,120 @@ export const useSchoolStore = defineStore('school', {
         console.error('Error fetching Content Awaiting Approval:', error);
       }
     },
+    async fetchGrades(schoolId) {
+      this.isGradesDataLoaded = false;
+      try {
+        const response = await this.$http.get('grade/schoolAdmin/getGrades', {params: { school_id: schoolId},});
+        if (response.status == 200) {
+          this.gradesData = response.data;
+          this.isGradesDataLoaded = true;
+        }
+      } catch (error) {
+        console.error('Error fetching Grades:', error);
+      }
+    },
+    // Delete Requests
+    async deleteDistrictSchool(id) {
+      try {
+        const response = await this.$http.delete('school/delete', {params: { school_id: id,},});
+        if (response.status == 200) {
+          await this.fetchDistrictSchoolsData();
+        }
+      } catch (error) {
+        console.error('Error Deleting School:', error);
+      }
+    },
+    async deletePerson(id) {
+      try {
+        const response = await this.$http.delete('user/delete', {params: { user_id: id,},});
+        if (response.status == 200) {
+          await this.fetchPeopleData('school admin');
+        }
+      } catch (error) {
+        console.error('Error Deleting Person:', error);
+      }
+    },
+    async deletePolicy(id) {
+      try {
+        const response = await this.$http.delete('policy/delete', {params: { policy_id: id,},});
+        if (response.status == 200) {
+          await this.fetchDSchoolPolicies();
+        }
+      } catch (error) {
+        console.error('Error Deleting Policies:', error);
+      }
+    },
+
+    // Update Requests
+    async updateDistrictSchool(school) {
+      try {
+        const response = await this.$http.put('school/update', school);
+        if (response.status == 200) {
+          await this.fetchDistrictSchoolsData();
+        }
+      } catch (error) {
+        console.error('Error Updating School:', error);
+      }
+    },
+    async updatePerson(person, personType) {
+      try {
+        const response = await this.$http.put('user/update', person);
+        if (response.status == 200) {
+          await this.fetchPeopleData(personType);
+        }
+      } catch (error) {
+        console.error('Error Updating Person:', error);
+      }
+    },
+    async updatePolicy(policy) {
+      try {
+        const response = await this.$http.put('policy/update', policy);
+        if (response.status == 200) {
+          await this.fetchDSchoolPolicies();
+        }
+      } catch (error) {
+        console.error('Error Updating Policy:', error);
+      }
+    },
+    async updateGrade(userId, gradeId, role, schoolId) {
+      try {
+        const params = new URLSearchParams();
+        params.append('user_id', userId);
+        params.append('grade_id', gradeId);
+        params.append('user_role', role);
+        const response = await this.$http.put('user/update/gradeIdUserId', null, {
+          params: params
+        });
+    
+        if (response.status === 200) {
+          await this.fetchGrades(schoolId);
+        }
+      } catch (error) {
+        console.error('Error Updating Grades:', error);
+      }
+    },    
+
+    // Create Requests
+    async createDistrictSchool(school) {
+      try {
+        const response = await this.$http.post('school/create/districtAdmin', school);
+        if (response.status == 200) {
+          await this.fetchDistrictSchoolsData();
+        }
+      } catch (error) {
+        console.error('Error Creating School:', error);
+      }
+    },
+    async createPolicy(policy) {
+      try {
+        const response = await this.$http.post('policy/create', policy);
+        if (response.status == 200) {
+          await this.fetchDSchoolPolicies();
+        }
+      } catch (error) {
+        console.error('Error Creating Policy:', error);
+      }
+    }
 
   },
   getters: {
@@ -120,5 +236,7 @@ export const useSchoolStore = defineStore('school', {
     getIsPublishedContentLoaded: (state) => state.isPublishedContentLoaded,
     getContentAwaitApproval: (state) => state.contentAwaitApproval,
     getIsContentAwaitApprovalLoaded: (state) => state.isContentAwaitApprovalLoaded,
+    getGradesData: (state) => state.gradesData,
+    getIsGradesDataLoaded: (state) => state.isGradesDataLoaded,
   },
 });

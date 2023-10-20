@@ -25,6 +25,12 @@
               Policies
             </router-link>
           </li>
+          <li class="sidelinks">
+            <img src="@/assets/icons/teacher.svg" alt="side bar icon">
+            <router-link to="/teachers" active-class="text-xl font-extrabold">
+              Teachers
+            </router-link>
+          </li>
         </ul>
       </div></template>
   

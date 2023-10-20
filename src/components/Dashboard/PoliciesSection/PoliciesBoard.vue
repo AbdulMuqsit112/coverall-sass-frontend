@@ -43,12 +43,16 @@ export default {
     },
     fliterPolicies() {
       let policies = this.getSchoolPolicies();
+      let allowedPolicy = [];
+      let blockedPolicy = [];
       policies.forEach(policy => {
-        if (policy.policy_status === "Allow") {
-          this.allowedSchoolPolicies.push(policy);
-        } else if (policy.policy_status === "Block") {
-          this.blockedSchoolPolicies.push(policy);
+        if (policy.policy_status === "whitelist") {
+          allowedPolicy.push(policy);
+        } else if (policy.policy_status === "blacklist") {
+          blockedPolicy.push(policy);
         }
+        this.allowedSchoolPolicies = allowedPolicy.splice(0,3);
+        this.blockedSchoolPolicies = blockedPolicy.splice(0,3);
       });
     }
   },

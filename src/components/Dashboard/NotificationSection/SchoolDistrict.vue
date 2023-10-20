@@ -18,7 +18,7 @@
         </div>
     </div>
     <hr>
-    <p class="text-center underline cursor-pointer">See All</p>
+    <router-link to="/schools" class="text-center underline cursor-pointer">See All</router-link>
   </div>
 </template>
         
