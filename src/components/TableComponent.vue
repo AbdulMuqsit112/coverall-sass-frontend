@@ -15,7 +15,11 @@
             class="absolute right-3 top-4 transform -translate-y-1/2"
           />
         </div>
-        <button v-if="isAdd" class="bg-blue-400 text-white text-sm h-7 px-6 rounded-lg" @click="addRecord()">
+        <button
+          v-if="isAdd"
+          class="bg-blue-400 text-white text-sm h-7 px-6 rounded-lg"
+          @click="addRecord()"
+        >
           Add +
         </button>
       </div>
@@ -39,7 +43,7 @@
               <div class="flex justify-center">
                 <select
                   v-model="item[column]"
-                  :class="getDropdownClass(item[column])"
+                  :class="getDropdownClass(item[column], column)"
                   @change="updateRecord(item, column)"
                 >
                   <option
@@ -77,6 +81,17 @@
                   alt="edit"
                   @click="toggleInput($event)"
                 />
+              </div>
+            </template>
+            <template v-else-if="column == 'Password Reset'">
+              <div class="flex justify-center text-xs cursor-pointer" @click="ResetPassword(item)">
+              <span class="flex gap-1 p-1 w-fit m-2 bg-[#F3F3F3] rounded-xl ">
+                Reset
+                <img
+                  src="@/assets/icons/reset.svg"
+                  alt="delete"
+                />
+              </span>
               </div>
             </template>
             <template v-else>
@@ -124,6 +139,9 @@ export default {
     isDelete: {
       type: Boolean,
     },
+    isReset: {
+      type: Boolean,
+    },
     title: {
       type: String,
     },
@@ -134,7 +152,7 @@ export default {
     gradeData: {
       type: Array,
       default: () => [],
-    }
+    },
   },
   data() {
     return {
@@ -152,16 +170,16 @@ export default {
       return this.stateColumns.includes(column);
     },
     getDropdownOptions(column) {
-      if (column == "subscription_status" || column == 'status') {
+      if (column == "subscription_status" || column == "status") {
         return ["disabled", "enabled"];
       } else if (column === "type") {
         return ["District", "Regular"];
-      } else if (column == "policy_status"){
+      } else if (column == "policy_status") {
         return ["blacklist", "whitelist"];
-      } else if (column == "grade_name"){
+      } else if (column == "grade_name") {
         return this.gradeData;
       } else {
-          return [];
+        return [];
       }
     },
     toggleInput(event) {
@@ -194,19 +212,21 @@ export default {
           return colName.charAt(0).toUpperCase() + colName.slice(1);
       }
     },
-    getDropdownClass(value) {
+    getDropdownClass(value, column) {
       if (value == "enabled" || value == "whitelist") {
         return "px-2 py-2 my-1 block text-xs rounded-lg bg-green-200 text-green-500";
       } else if (value == "disabled" || value == "blacklist") {
         return "px-2 py-2 my-1 block text-xs rounded-lg bg-red-100 text-red-500";
+      } else if (column == 'grade_name') {
+        return "py-2 my-1 block text-xs rounded-lg bg-[#F3F3F3]";
       } else {
         return "py-2 block text-xs border-none text-black";
       }
     },
-    
+
     updateRecord(record, column) {
-      if (column == "grade_name"){
-        this.$emit("update-grades",record)
+      if (column == "grade_name") {
+        this.$emit("update-grades", record);
       } else {
         this.$emit("update-record", record);
       }
@@ -219,8 +239,11 @@ export default {
         this.$emit("delete-record", record.id);
       }
     },
-    addRecord(){
+    addRecord() {
       this.$emit("add-record");
+    },
+    ResetPassword(record) {
+      this.$emit("reset-password", record);
     },
   },
   computed: {

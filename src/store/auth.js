@@ -58,6 +58,20 @@ export const useAuthStore = defineStore('auth', {
           schoolId: ''
         };
     },
+    async resetPassword(userID){
+      try {
+        const params = new URLSearchParams();
+        params.append('user_id', userID);
+        const response = await this.$http.post('user/schoolAdmin/passwordReset', null, {
+          params: params
+        });
+        if (response.status == 200) {
+          console.error('Password Reset Successful');
+        }
+      } catch (error) {
+        console.error('Error Resetting Password:', error);
+      }
+    }
   },
   getters: {
     getUser: (state) =>state.user,

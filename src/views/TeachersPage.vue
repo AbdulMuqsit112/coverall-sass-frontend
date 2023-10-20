@@ -8,17 +8,20 @@
         'full_name',
         'email',
         'grade_name',
-        'status',
+        'Password Reset',
+        'status'
       ]"
       :data="distictSchools"
 			:dropdownColumns="['status', 'grade_name']"
       :isDelete="true"
       :title="'School Teachers'"
 			:gradeData="grades"
+      :isReset="true"
+      :isAdd="false"
       @delete-record="deleteTeacher"
       @update-record="updateTeachers"
-      @add-record="toggleDSchoolModal"
       @update-grades="updateGrades"
+      @reset-password="resetPassword"
     />
   </div>
 </template>
@@ -60,6 +63,9 @@ export default {
     },
     updateTeachers(teacher) {
       useSchoolStore().updatePerson({ ...teacher }, 'teacher');
+    },
+    resetPassword(record) {
+      useAuthStore().resetPassword(record.id);
     },
     updateGrades(record) {
 			let schoolId = useAuthStore().getUser.schoolId;

@@ -182,20 +182,21 @@ export const useSchoolStore = defineStore('school', {
     },
     async updateGrade(userId, gradeId, role, schoolId) {
       try {
-        const response = await this.$http.put('user/update/gradeIdUserId', { 
-          params: {
-            user_id: userId,
-            grade_id: gradeId,
-            user_role: role
-          },
-        },);
+        const params = new URLSearchParams();
+        params.append('user_id', userId);
+        params.append('grade_id', gradeId);
+        params.append('user_role', role);
+        const response = await this.$http.put('user/update/gradeIdUserId', null, {
+          params: params
+        });
+    
         if (response.status === 200) {
           await this.fetchGrades(schoolId);
         }
       } catch (error) {
         console.error('Error Updating Grades:', error);
       }
-    },
+    },    
 
     // Create Requests
     async createDistrictSchool(school) {
