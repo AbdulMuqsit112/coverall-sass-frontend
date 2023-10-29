@@ -15,6 +15,7 @@
       :editableColumns="['name', 'description']"
       :isDelete="true"
       :title="'Policies'"
+      :disableSomeFields="userRole == 'school admin'"
       @delete-record="deletePolicy"
       @update-record="updatePolicy"
       @add-record="toggleAdminModal"

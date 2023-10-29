@@ -1,5 +1,6 @@
 <template>
   <div class="dashboard flex flex-col gap-8">
+    <AlertComponent v-if="showAlert"/>
     <TopBar/>
     <div class="flex container mx-auto gap-6 xl:gap-10 my-12">
       <SideBar/>
@@ -11,16 +12,18 @@
 
 <script>
 import TopBar from "@/components/TopBar.vue";
+import AlertComponent from "./components/AlertComponent.vue";
 import SideBar from "@/components/SideBar.vue";
 import PageFooter from "@/components/PageFooter.vue";
 import { useAuthStore } from "@/store/auth.js";
-
+import { useSchoolStore } from "./store/school";
 export default {
   name: 'App',
   components: {
     TopBar,
     SideBar,
-    PageFooter
+    PageFooter,
+    AlertComponent
   },
   methods: {
     fetchUser() {
@@ -29,6 +32,7 @@ export default {
         authStore.getUserDetails();
         
       } catch (error) {
+        useSchoolStore().setAlert(error.msg, 'error');
         console.error(error);
       }
     },
@@ -39,7 +43,10 @@ export default {
   computed: {
     isAuthenticated(){
       return useAuthStore().getIsAuthenticated;
-    }
+    },
+    showAlert(){
+      return useSchoolStore().getAlertVal;
+    },
   }
 }
 </script>

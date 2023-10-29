@@ -15,13 +15,12 @@ export const useAuthStore = defineStore('auth', {
     async getUserDetails() {
       try {
         let token = localStorage.getItem("token")
-        console.log("Token is :", token);
         if (!token){
           const urlParams = new URLSearchParams(window.location.search);
           token = urlParams.get("token");
           localStorage.setItem("token", token);
         }
-        const response = await this.$http.get('user/getUserInfo');
+        const response = await this.$http.get('user/get/userInfo');
         if (response.status == 200){
           const fetchedUser = response.data;
           this.user.firstName = fetchedUser.first_name;
@@ -62,7 +61,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const params = new URLSearchParams();
         params.append('user_id', userID);
-        const response = await this.$http.post('user/schoolAdmin/passwordReset', null, {
+        const response = await this.$http.post('user/passwordReset', null, {
           params: params
         });
         if (response.status == 200) {

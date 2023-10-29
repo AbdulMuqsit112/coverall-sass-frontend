@@ -35,7 +35,7 @@ export default {
       useSchoolStore().fetchPeopleData("school admin");
     },
     deleteAdmin(id) {
-      useSchoolStore().deletePerson(id);
+      useSchoolStore().deletePerson(id, "school admin");
     },
     updateAdmin(admin) {
       useSchoolStore().updatePerson({ ...admin }, 'school admin');

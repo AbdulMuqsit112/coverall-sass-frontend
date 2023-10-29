@@ -42,6 +42,7 @@
             <template v-if="isDropdownColumn(column)">
               <div class="flex justify-center">
                 <select
+                v-if="!isDisableField(item)"
                   v-model="item[column]"
                   :class="getDropdownClass(item[column], column)"
                   @change="updateRecord(item, column)"
@@ -57,6 +58,11 @@
                     }}
                   </option>
                 </select>
+                <div v-else class="flex justify-center">
+                <div :class="getDropdownClass(item[column])">
+                  {{ item[column] }}
+                </div>
+              </div>
               </div>
             </template>
             <template v-else-if="isStateColumn(column)">
@@ -74,8 +80,9 @@
                   class="text-xs border-none text-center bg-white w-1/2"
                   disabled
                   @blur="updateRecord(item)"
-                />
+                  />
                 <img
+                  v-if="!isDisableField(item)"
                   src="@/assets/icons/pencil.svg"
                   class="cursor-pointer"
                   alt="edit"
@@ -95,11 +102,12 @@
               </div>
             </template>
             <template v-else>
-              <span class="w-1/2 text-xs">{{ item[column] }}</span>
+              <span :class="getSpanClass(column, item[column])">{{ item[column] }}</span>
             </template>
           </td>
           <td v-if="isDelete" class="flex justify-center mt-3">
             <img
+              v-if="!isDisableField(item)"
               src="@/assets/icons/bin.svg"
               alt="delete"
               class="cursor-pointer"
@@ -149,10 +157,15 @@ export default {
       type: Boolean,
       default: () => true,
     },
+    disableSomeFields : {
+      type: Boolean,
+      default: () => false,
+    },
     gradeData: {
       type: Array,
       default: () => [],
     },
+    
   },
   data() {
     return {
@@ -208,6 +221,14 @@ export default {
           return "Status";
         case "grade_name":
           return "Grades";
+        case "risk_score":
+          return "Risk Score";
+        case "teacher_name":
+          return "Teacher";
+        case "grade_id":
+          return "Id";
+        case "students_count":
+          return "Total Students";
         default:
           return colName.charAt(0).toUpperCase() + colName.slice(1);
       }
@@ -244,6 +265,33 @@ export default {
     },
     ResetPassword(record) {
       this.$emit("reset-password", record);
+    },
+    getSpanClass(column, score){
+      if (column == "risk_score"){
+        if (score < 4){
+          return "underline w-1/2 text-xs text-green-500";
+        }
+        else if (score < 6){
+          return "underline w-1/2 text-xs text-[#EC9A3A]"
+        }
+        else {
+          return "underline w-1/2 text-xs text-red-500"
+        }
+      }
+      else {
+        return "w-1/2 text-xs";
+      }
+    },
+    isDisableField(item){
+      if (this.disableSomeFields){
+        if (item.isEditable){
+          return false;
+        } else {
+          return true
+        }
+      } else {
+        return false;
+      }
     },
   },
   computed: {

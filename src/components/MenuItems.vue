@@ -31,6 +31,24 @@
               Teachers
             </router-link>
           </li>
+          <li class="sidelinks">
+            <img src="@/assets/icons/student.svg" alt="side bar icon">
+            <router-link to="/students" active-class="text-xl font-extrabold">
+              Students
+            </router-link>
+          </li>
+          <li class="sidelinks">
+            <img src="@/assets/icons/student.svg" alt="side bar icon">
+            <router-link to="/classes" active-class="text-xl font-extrabold">
+              Classes
+            </router-link>
+          </li>
+          <li class="sidelinks">
+            <img src="@/assets/icons/student.svg" alt="side bar icon">
+            <router-link to="/grades" active-class="text-xl font-extrabold">
+              Grades
+            </router-link>
+          </li>
         </ul>
       </div></template>
   

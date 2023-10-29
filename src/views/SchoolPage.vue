@@ -15,7 +15,7 @@
       :stateColumns="['subscription_status']"
       :editableColumns="['name', 'address']"
       :isDelete="true"
-      :title="'School Teachers'"
+      :title="'District Schools'"
       @delete-record="deleteDSchool"
       @update-record="updateDSchool"
       @add-record="toggleDSchoolModal"
