@@ -4,21 +4,29 @@
       <p class="font-semibold text-lg">{{ userRole }} Dashboard</p>
       <p class="font-Montserrat text-3xl">Welcome, {{ userName }}</p>
     </div>
-    <DashboardGraphs v-if="userRole != 'student'"/>
-    <div :class="{'justify-center': userRole != 'content approver',}" class="flex flex-wrap gap-8 mt-4">
-      <DashboardNotifications/>
-      <DashboardPolicies/>
-    <PublishedContent v-if="(userRole == 'student' || userRole == 'content approver') && (isPublishedContent || isContentAwaitApproval)"/>
+    <DashboardGraphs v-if="userRole != 'student'" />
+    <div
+      :class="{ 'justify-center': userRole != 'content approver' }"
+      class="flex flex-wrap gap-8 mt-4"
+    >
+      <DashboardNotifications />
+      <DashboardPolicies />
+      <PublishedContent
+        v-if="
+          (userRole == 'student' || userRole == 'content approver') &&
+          (isPublishedContent || isContentAwaitApproval)
+        "
+      />
     </div>
   </div>
 </template>
 
 <script>
-import DashboardPolicies from '@/components/Dashboard/PoliciesSection/DashboardPolicies.vue';
-import DashboardGraphs from '@/components/Dashboard/GraphSection/DashboardGraphs.vue';
-import DashboardNotifications from '@/components/Dashboard/NotificationSection/DashboardNotifications.vue';
-import PublishedContent from '@/components/Dashboard/PublishedContent.vue';
-import { useAuthStore } from '@/store/auth.js'
+import DashboardPolicies from "@/components/Dashboard/PoliciesSection/DashboardPolicies.vue";
+import DashboardGraphs from "@/components/Dashboard/GraphSection/DashboardGraphs.vue";
+import DashboardNotifications from "@/components/Dashboard/NotificationSection/DashboardNotifications.vue";
+import PublishedContent from "@/components/Dashboard/PublishedContent.vue";
+import { useAuthStore } from "@/store/auth.js";
 import { useSchoolStore } from "@/store/school.js";
 
 export default {
@@ -27,28 +35,37 @@ export default {
     DashboardGraphs,
     DashboardNotifications,
     DashboardPolicies,
-    PublishedContent
+    PublishedContent,
   },
   methods: {
     initiateApiCalls() {
-      if (this.userRole == 'district admin'){
-        this.fetchDistrictSchools();
-        this.fetchDSchoolPolicies();
-        this.fetchPeopleData('school admin');
-      } else if (this.userRole == 'school admin'){
-        this.fetchSchoolStudents();
-        this.fetchPeopleData('teacher');
-        this.fetchDSchoolPolicies();
-      } else if(this.userRole == 'teacher'){
-        this.fetchSchoolStudents();
-        this.fetchPeopleData('student');
-        this.fetchDSchoolPolicies();
-      } else if (this.userRole == 'student'){
-        this.fetchStudentsClassTeachers()
-        this.fetchPublishedContent();
-      } else if (this.userRole == 'content approver'){
-        this.fetchDSchoolPolicies();
-        this.fetchContentAwaitApproval();
+      switch (this.userRole) {
+        case "district admin":
+          this.fetchDistrictSchools();
+          this.fetchDSchoolPolicies();
+          this.fetchPeopleData("school admin");
+          break;
+        case "school admin":
+          this.fetchSchoolStudents();
+          this.fetchPeopleData("teacher");
+          this.fetchDSchoolPolicies();
+          break;
+        case "teacher":
+          this.fetchSchoolStudents();
+          this.fetchPeopleData("student");
+          this.fetchDSchoolPolicies();
+          break;
+        case "student":
+          this.fetchStudentsClassTeachers();
+          this.fetchPublishedContent();
+          break;
+        case "content approver":
+          this.fetchDSchoolPolicies();
+          this.fetchContentAwaitApproval();
+          break;
+        default:
+          console.log("Invalid user role");
+          break;
       }
     },
     fetchDistrictSchools() {
@@ -75,7 +92,7 @@ export default {
         console.error(error);
       }
     },
-    fetchSchoolStudents(){
+    fetchSchoolStudents() {
       const schoolStore = useSchoolStore();
       try {
         schoolStore.fetchSchoolStudents();
@@ -83,7 +100,7 @@ export default {
         console.error(error);
       }
     },
-    fetchStudentsClassTeachers(){
+    fetchStudentsClassTeachers() {
       const schoolStore = useSchoolStore();
       try {
         schoolStore.fetchStudentsClassTeachers();
@@ -91,7 +108,7 @@ export default {
         console.error(error);
       }
     },
-    fetchPublishedContent(){
+    fetchPublishedContent() {
       const schoolStore = useSchoolStore();
       try {
         schoolStore.fetchPublishedContent();
@@ -99,46 +116,45 @@ export default {
         console.error(error);
       }
     },
-    fetchContentAwaitApproval(){
+    fetchContentAwaitApproval() {
       const schoolStore = useSchoolStore();
       try {
         schoolStore.fetchContentAwaitingApproval();
       } catch (error) {
         console.error(error);
       }
-    }
+    },
   },
   computed: {
     userName() {
       let user = useAuthStore().getUser;
-      return user.firstName + ' ' + user.lastName
+      return user.firstName + " " + user.lastName;
     },
     userRole() {
       return useAuthStore().getUser.role;
     },
-    isPublishedContent(){
+    isPublishedContent() {
       return useSchoolStore().getIsPublishedContentLoaded;
     },
-    isContentAwaitApproval(){
+    isContentAwaitApproval() {
       return useSchoolStore().getIsContentAwaitApprovalLoaded;
-    }
+    },
   },
-  mounted(){
+  mounted() {
     this.initiateApiCalls();
-  }
+  },
 };
 </script>
-    
+
 <style>
 .tile {
   background-color: white;
   padding-block: 0.5rem;
-  box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.1), 2px 2px 4px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.1), 2px 2px 4px rgba(0, 0, 0, 0.1),
+    0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
 }
-.textbox{
+.textbox {
   width: inherit;
 }
-
 </style>
-    

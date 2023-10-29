@@ -11,7 +11,7 @@
         'Password Reset',
         'status'
       ]"
-      :data="distictSchools"
+      :data="teachersData"
 			:dropdownColumns="['status', 'grade_name']"
       :isDelete="true"
       :title="'School Teachers'"
@@ -36,7 +36,7 @@ export default {
     TableComponent,
   },
   computed: {
-    distictSchools() {
+    teachersData() {
       return useSchoolStore().getPeopleData;
     },
     isTeachers() {
@@ -59,7 +59,7 @@ export default {
       useSchoolStore().fetchGrades(schoolId)
 		},
     deleteTeacher(id) {
-      useSchoolStore().deletePerson(id);
+      useSchoolStore().deletePerson(id, "teacher");
     },
     updateTeachers(teacher) {
       useSchoolStore().updatePerson({ ...teacher }, 'teacher');
