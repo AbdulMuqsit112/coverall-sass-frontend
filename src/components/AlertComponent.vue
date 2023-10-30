@@ -13,12 +13,10 @@ export default {
       useSchoolStore().toggleAlert();
     }, 1300);
   },
+  props: ['text', 'alertColor'],
   computed: {
-    text(){
-      return useSchoolStore().getAlertText;
-    },
     color(){
-      let colorVal = useSchoolStore().getAlertColor;
+      let colorVal = this.alertColor;
       switch (colorVal) {
         case "error":
           return "bg-red-400";

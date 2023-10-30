@@ -1,12 +1,13 @@
 <template>
   <div class="dashboard flex flex-col gap-8">
-    <AlertComponent v-if="showAlert"/>
     <TopBar/>
-    <div class="flex container mx-auto gap-6 xl:gap-10 my-12">
+    <AlertComponent v-if="showAlert" :text="alertText" :alertColor="alertColor"/>
+    <div class="flex container mx-auto gap-6 xl:gap-10 my-12" v-if="isAuthenticated">
       <SideBar/>
-      <router-view v-if="isAuthenticated"></router-view>
+      <router-view></router-view>
     </div>
-    <PageFooter/>
+    <loaderComponent v-else/>
+    <PageFooter v-if="isAuthenticated"/>
   </div>
 </template>
 
@@ -15,6 +16,7 @@ import TopBar from "@/components/TopBar.vue";
 import AlertComponent from "./components/AlertComponent.vue";
 import SideBar from "@/components/SideBar.vue";
 import PageFooter from "@/components/PageFooter.vue";
+import loaderComponent from "./components/loaderComponent.vue";
 import { useAuthStore } from "@/store/auth.js";
 import { useSchoolStore } from "./store/school";
 export default {
@@ -23,7 +25,8 @@ export default {
     TopBar,
     SideBar,
     PageFooter,
-    AlertComponent
+    AlertComponent,
+    loaderComponent
   },
   methods: {
     fetchUser() {
@@ -32,7 +35,6 @@ export default {
         authStore.getUserDetails();
         
       } catch (error) {
-        useSchoolStore().setAlert(error.msg, 'error');
         console.error(error);
       }
     },
@@ -46,6 +48,12 @@ export default {
     },
     showAlert(){
       return useSchoolStore().getAlertVal;
+    },
+    alertText(){
+      return useSchoolStore().getAlertText;
+    },
+    alertColor(){
+      return useSchoolStore().getAlertColor;
     },
   }
 }

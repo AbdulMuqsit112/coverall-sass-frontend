@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { useSchoolStore } from './school';
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     isAuthenticated: false,
@@ -33,6 +34,7 @@ export const useAuthStore = defineStore('auth', {
         }
       } catch (error) {
         console.error('Error fetching user details:', error);
+        useSchoolStore().setAlert(error, 'error')
         this.user = {
           firstName: '',
           lastName: '',

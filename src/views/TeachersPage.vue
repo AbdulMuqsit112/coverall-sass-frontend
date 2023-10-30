@@ -23,17 +23,20 @@
       @update-grades="updateGrades"
       @reset-password="resetPassword"
     />
+    <loaderComponent v-else/>
   </div>
 </template>
 
 <script>
 import TableComponent from "@/components/TableComponent.vue";
+import loaderComponent from "@/components/loaderComponent.vue";
 import { useSchoolStore } from "@/store/school";
 import { useAuthStore } from "@/store/auth";
 export default {
   name: "TeachersPage",
   components: {
     TableComponent,
+    loaderComponent
   },
   computed: {
     teachersData() {

@@ -2,11 +2,11 @@
   <div class="overflow-scroll p-4 bg-white rounded-lg h-[40rem]">
     <div class="flex justify-between w-full">
       <span class="text-xl font-black">{{ title }}</span>
-      <div class="flex gap-4 py-4">
+      <div class="flex gap-4 pt-4">
         <div class="relative">
           <input
             v-model="searchQuery"
-            class="mb-4 px-4 py-1 w-[30rem] rounded-3xl bg-[#F8F8F8]"
+            class="px-4 py-1 w-[30rem] rounded-3xl bg-[#F8F8F8]"
             placeholder="Search"
           />
           <img
@@ -24,7 +24,9 @@
         </button>
       </div>
     </div>
-    <table class="table overflow-scroll table-fixed w-full">
+    <div v-if="isEnrolled" class="text-lg font-normal text-[#00000099]">You are enrolled in <span class="font-black text-black">class 8</span>
+    </div>
+    <table class="table overflow-scroll table-fixed w-full mt-6">
       <thead>
         <tr>
           <th
@@ -146,6 +148,7 @@ export default {
     },
     isDelete: {
       type: Boolean,
+      default: () => false,
     },
     isReset: {
       type: Boolean,
@@ -164,6 +167,10 @@ export default {
     gradeData: {
       type: Array,
       default: () => [],
+    },
+    isEnrolled: {
+      type: Boolean,
+      default: () => false,
     },
     
   },
@@ -229,6 +236,8 @@ export default {
           return "Id";
         case "students_count":
           return "Total Students";
+        case "class_name":
+          return "Class";
         default:
           return colName.charAt(0).toUpperCase() + colName.slice(1);
       }

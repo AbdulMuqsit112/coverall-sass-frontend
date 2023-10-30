@@ -1,13 +1,11 @@
 <template>
-  <div class="tile flex flex-wrap flex-colgap-6 px-4 md:w-[30rem] xl:w-[58.5rem]">
-    <div class="flex justify-between w-full">
+  <div class="tile flex flex-wrap flex-colgap-6 px-4 md:w-[30rem] xl:w-[60rem]">
+    <div class="flex justify-between w-full mt-2">
       <p class="font-Montserrat">{{ titleText }}</p>
       <button class="rounded-lg text-white text-xs bg-blue-400 px-3 py-1">View all</button>
     </div>
-    <div :class="{
-      'gap-2': role !== 'student',
-      'gap-24 py-10': role === 'student',
-    }" class="flex">
+    <div :class="{ 'justify-center gap-20 py-10': userRole == 'student', 'gap-2': userRole != 'student',
+    }" class="flex mt-4">
       <div class="flex flex-col p-4" v-for="content in publishedContent" :key="content">
         <img src="@/assets/icons/content.svg" alt="content">
         <p class="font-black text-sm ml-1">{{ content.video_details }}</p>
@@ -39,15 +37,19 @@ export default {
     }
   },
   mounted() {
-    let role = useAuthStore().getUser.role;
-    if (role == 'student'){
+    if (this.userRole == 'student'){
       this.getPublishedContent();
       this.titleText = 'Newly Published Content';
-    } else if (role == "content approver"){
+    } else if (this.userRole == "content approver"){
       this.getContentAwaitApproval();
       this.titleText = 'Content Awaiting Approval';
     }
-  }
+  },
+  computed: {
+    userRole(){
+      return useAuthStore().getUser.role;
+    },
+  },
 };
 </script>
         

@@ -49,6 +49,18 @@
               Grades
             </router-link>
           </li>
+          <li class="sidelinks">
+            <img src="@/assets/icons/student.svg" alt="side bar icon">
+            <router-link to="/displayContent" active-class="text-xl font-extrabold">
+              display Content
+            </router-link>
+          </li>
+          <li class="sidelinks">
+            <img src="@/assets/icons/student.svg" alt="side bar icon">
+            <router-link to="/content" active-class="text-xl font-extrabold">
+              Content
+            </router-link>
+          </li>
         </ul>
       </div></template>
   

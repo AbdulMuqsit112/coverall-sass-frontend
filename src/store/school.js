@@ -24,7 +24,7 @@ export const useSchoolStore = defineStore('school', {
     isContentAwaitApprovalLoaded: false,
     isGradesDataLoaded: false,
     isClassesLoaded: false,
-    isGradesTeacherLoaded: false
+    isGradesTeacherLoaded: false,
 
   }),
   actions: {
@@ -91,7 +91,7 @@ export const useSchoolStore = defineStore('school', {
     async fetchStudentsClassTeachers() {
       this.isStudentClassTeachersLoaded = false;
       try {
-        const response = await this.$http.get('school/getStudentsClassTeachers');
+        const response = await this.$http.get('school/get/studentsClassTeachers');
         if (response.status == 200) {
           this.studentClassTeachers = response.data;
           this.isStudentClassTeachersLoaded = true;
@@ -104,7 +104,7 @@ export const useSchoolStore = defineStore('school', {
     async fetchPublishedContent() {
       this.isPublishedContentLoaded = false;
       try {
-        const response = await this.$http.get('video/getVideos/students');
+        const response = await this.$http.get('video/get/students');
         if (response.status == 200) {
           this.publishedContent = response.data;
           this.isPublishedContentLoaded = true;
@@ -117,7 +117,7 @@ export const useSchoolStore = defineStore('school', {
     async fetchContentAwaitingApproval() {
       this.isContentAwaitApprovalLoaded = false;
       try {
-        const response = await this.$http.get('video/getVideos/contentApprovers/contentWaitingApproval');
+        const response = await this.$http.get('video/get/contentApprovers/contentWaitingApproval');
         if (response.status == 200) {
           this.contentAwaitApproval = response.data;
           this.isContentAwaitApprovalLoaded = true;
@@ -156,7 +156,7 @@ export const useSchoolStore = defineStore('school', {
     async fetchGradesTeacher(id) {
       this.isGradesTeacherLoaded = false;
       try {
-        const response = await this.$http.get('/grade/schoolAdmin/getGradesTeachers', {params: { grade_id: id},});
+        const response = await this.$http.get('grade/schoolAdmin/getGradesTeachers', {params: { grade_id: id},});
         if (response.status == 200) {
           this.gradesTeacher = response.data;
           this.isGradesTeacherLoaded = true;
@@ -173,7 +173,7 @@ export const useSchoolStore = defineStore('school', {
       try {
         const response = await this.$http.delete('school/delete', {params: { school_id: id,},});
         if (response.status == 200) {
-          this.setAlert('Successfully Deleted', 'success');
+          this.setAlert('Successfully Deleted', 'info');
           await this.fetchDistrictSchoolsData();
         }
       } catch (error) {
@@ -185,7 +185,7 @@ export const useSchoolStore = defineStore('school', {
       try {
         const response = await this.$http.delete('user/delete', {params: { user_id: id,},});
         if (response.status == 200) {
-          this.setAlert('Successfully Deleted', 'success');
+          this.setAlert('Successfully Deleted', 'info');
           await this.fetchPeopleData(userType);
         }
       } catch (error) {
@@ -197,7 +197,7 @@ export const useSchoolStore = defineStore('school', {
       try {
         const response = await this.$http.delete('policy/delete', {params: { policy_id: id,},});
         if (response.status == 200) {
-          this.setAlert('Successfully Deleted', 'success');
+          this.setAlert('Successfully Deleted', 'info');
           await this.fetchDSchoolPolicies();
         }
       } catch (error) {
@@ -209,7 +209,7 @@ export const useSchoolStore = defineStore('school', {
       try {
         const response = await this.$http.delete('class/delete', {params: { class_id: id,},});
         if (response.status == 200) {
-          this.setAlert('Successfully Deleted', 'success');
+          this.setAlert('Successfully Deleted', 'info');
           await this.fetchClasses();
         }
       } catch (error) {
@@ -348,6 +348,6 @@ export const useSchoolStore = defineStore('school', {
     getclassesData: (state) => state.classes,
     getIsClassesLoaded: (state) => state.isClassesLoaded,
     getGradesTeachers: (state) => state.gradesTeacher,
-    getIsGradesTeachersLoaded: (state) => state.isGradesTeacherLoaded,
+    getIsGradesTeachersLoaded: (state) => state.isGradesTeacherLoaded,    
   },
 });
