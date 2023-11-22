@@ -2,7 +2,7 @@
   <div
     class="fixed inset-0 flex items-center justify-center bg-opacity-80 backdrop-filter backdrop-blur-md"
   >
-    <div class="modal bg-white shadow-lg rounded-lg">
+    <div class="modal bg-white shadow-lg rounded-lg w-[30rem]">
       <div class="modal-content">
         <h2
           class="modal-title text-2xl text-center font-bold py-4 border-b border-gray-200"
@@ -10,25 +10,40 @@
           {{ title }}
         </h2>
         <form @submit.prevent="submitForm">
-          <div class="modal-body p-4 grid grid-cols-2 gap-8">
+          <div class="modal-body p-4">
             <!-- Render input fields -->
-            <div class="col-span-1">
+            <div class="">
               <div
                 v-for="field in inputFields"
                 :key="field.id"
-                class="mb-4 gap-2"
+                class="mb-4 ml-4 gap-6 flex"
               >
-                <label class="block mb-2">{{ field.label }}</label>
+                <label class="mb-2 mr-5">{{ field.label }}</label>
                 <input
                   type="text"
                   v-model="field.value"
-                  class="bg-[#f8f8f8] rounded-md px-2 py-1"
+                  class="bg-[#f8f8f8] rounded-md px-2 py-1 w-64"
                 />
               </div>
             </div>
 
+            <!-- Render Text Area fields -->
+            <div class="">
+              <div
+                v-for="field in textAreaFields"
+                :key="field.id"
+                class="mb-4 gap-6 flex"
+              >
+                <label class="mt-4">{{ field.label }}</label>
+                <textarea
+                  v-model="field.value"
+                  class="bg-[#f8f8f8] rounded-md px-2 py-1 w-64"
+                ></textarea>
+              </div>
+            </div>
+
             <!-- Render radio buttons and dropdowns -->
-            <div class="col-span-1">
+            <div class="">
               <div
                 v-for="radioGroup in radioButtons"
                 :key="radioGroup.id"
@@ -55,9 +70,9 @@
               <div
                 v-for="dropdown in dropdownOptions"
                 :key="dropdown.id"
-                class="mb-4"
+                class="mb-4 ml-4 gap-6 flex"
               >
-                <label class="block mb-2">{{ dropdown.label }}</label>
+                <label class="mb-2 mr-5">{{ dropdown.label }}</label>
                 <select
                   v-model="dropdown.selectedOption"
                   class="border border-black rounded px-6 py-1"
@@ -76,9 +91,9 @@
               <div
                 v-for="dropdown in conditionalDropdowns"
                 :key="dropdown.id"
-                class="mb-4"
+                class="mb-4 ml-4 gap-6 flex"
               >
-                <label class="block mb-2">{{ dropdown.label }}</label>
+                <label class="mb-2">{{ dropdown.label }}</label>
                 <select
                   v-model="dropdown.selectedOption"
                   class="border border-black rounded px-6 py-1"
@@ -123,6 +138,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    textAreaFields: {
+      type: Array,
+      default: () => [],
+    },
     radioButtons: {
       type: Array,
       default: () => [],
@@ -158,6 +177,16 @@ export default {
           return result;
         }, {});
         formData = { ...inputFieldData };
+      }
+      if (this.textAreaFields.length > 0) {
+        let textAreaData = this.textAreaFields.reduce((result, item) => {
+          result[item.label] = item.value;
+          return result;
+        }, {});
+        formData = {
+          ...formData,
+          ...textAreaData
+        };
       }
       if (this.dropdownOptions.length > 0) {
         let dropDownData = this.dropdownOptions.map((obj) => {
@@ -198,6 +227,9 @@ export default {
     },
     resetFields() {
       this.inputFields.forEach((field) => {
+        field.value = "";
+      });
+      this.textAreaFields.forEach((field) => {
         field.value = "";
       });
 

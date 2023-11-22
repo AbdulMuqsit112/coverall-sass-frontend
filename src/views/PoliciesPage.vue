@@ -41,6 +41,7 @@
     <ModalComponent
       v-if="isAddPolicy"
       :inputFields="policyInputFields"
+      :textAreaFields="policyTextFields"
       :title="'Add Policy'"
       @close-modal="toggleAdminModal"
       @submited-data="addPolicy"
@@ -65,6 +66,8 @@ export default {
     return {
       policyInputFields: [
         { id: 1, label: "name", value: "" },
+      ],
+      policyTextFields: [
         { id: 2, label: "description", value: "" },
       ],
       isAddPolicy: false,

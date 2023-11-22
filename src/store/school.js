@@ -12,6 +12,9 @@ export const useSchoolStore = defineStore('school', {
     gradesData: [],
     classes: [],
     gradesTeacher: [],
+    allContent: [],
+    teachContent: [],
+    teacherClasses: [],
     alertText: '',
     alertColor: '',
     showAlert: false,
@@ -25,6 +28,9 @@ export const useSchoolStore = defineStore('school', {
     isGradesDataLoaded: false,
     isClassesLoaded: false,
     isGradesTeacherLoaded: false,
+    isAllContentLoaded: false,
+    isTeachContentLoaded: false,
+    isTeacherClassesLoaded: false,
 
   }),
   actions: {
@@ -166,7 +172,46 @@ export const useSchoolStore = defineStore('school', {
         console.error('Error fetching This grade Teacher:', error);
       }
     },
-    
+    async fetchAllContent() {
+      this.isAllContentLoaded = false;
+      try {
+        const response = await this.$http.get('video/get/contentApprovers');
+        if (response.status == 200) {
+          this.allContent = response.data;
+          this.isAllContentLoaded = true;
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error fetching Content:', error);
+      }
+    },
+    async fetchTeachersContent() {
+      this.isTeachContentLoaded = false;
+      try {
+        const response = await this.$http.get('video/get/teachers');
+        if (response.status == 200) {
+          this.teachContent = response.data;
+          this.isTeachContentLoaded = true;
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error fetching Content:', error);
+      }
+    },
+    async fetchTeachersClasses() {
+      this.isTeacherClassesLoaded = false;
+      try {
+        const response = await this.$http.get('class/get/teachers');
+        if (response.status == 200) {
+          this.teacherClasses = response.data;
+          this.isTeacherClassesLoaded = true;
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error fetching Classes:', error);
+      }
+    },
+
 
     // Delete Requests
     async deleteDistrictSchool(id) {
@@ -217,6 +262,19 @@ export const useSchoolStore = defineStore('school', {
         console.error('Error Deleting Class:', error);
       }
     },
+    async deleteContent(id) {
+      try {
+        const response = await this.$http.delete('video/delete', {params: { video_id: id,},});
+        if (response.status == 200) {
+          this.setAlert('Successfully Deleted', 'info');
+          await this.fetchTeachersContent();
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error Deleting Content:', error);
+      }
+    },
+
 
     // Update Requests
     async updateDistrictSchool(school) {
@@ -272,6 +330,22 @@ export const useSchoolStore = defineStore('school', {
         this.setAlert(error.message,'error')
         console.error('Error Updating Grades:', error);
       }
+    },
+    async approveDisapproveContent(id, reqType){
+      try {
+        const params = new URLSearchParams();
+        params.append('video_id', id);
+        const response = await this.$http.put(`video/${reqType}`, null, {
+          params: params
+        });
+        if (response.status === 200) {
+          this.setAlert('Successfully Updated', 'success');
+          await this.fetchAllContent();
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error Updating Content Status:', error);
+      }
     },    
 
     // Create Requests
@@ -322,6 +396,18 @@ export const useSchoolStore = defineStore('school', {
         this.setAlert(error.message,'error')
         console.error('Error Creating Grade:', error);
       }
+    },
+    async createContent(contentObj) {
+      try {
+        const response = await this.$http.post('video/create', contentObj);
+        if (response.status == 200) {
+          this.setAlert('Successfully Added', 'success');
+          await this.fetchTeachersContent();
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error Creating Content:', error);
+      }
     }
 
   },
@@ -349,5 +435,11 @@ export const useSchoolStore = defineStore('school', {
     getIsClassesLoaded: (state) => state.isClassesLoaded,
     getGradesTeachers: (state) => state.gradesTeacher,
     getIsGradesTeachersLoaded: (state) => state.isGradesTeacherLoaded,    
+    getAllContent: (state) => state.allContent,
+    getIsAllContentLoaded: (state) => state.isAllContentLoaded,    
+    getTeachContent: (state) => state.teachContent,
+    getIsTeachContentLoaded: (state) => state.isTeachContentLoaded,    
+    getTeacherClasses: (state) => state.teacherClasses,
+    getIsTeacherClassesLoaded: (state) => state.isTeacherClassesLoaded,    
   },
 });

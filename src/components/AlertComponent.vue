@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div :class="`alert ${color}`">
+    <div :class="`alert ${color} z-20`">
       <p>{{ text }}</p>
     </div>
   </transition>

@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard flex flex-col gap-8">
-    <TopBar/>
+    <TopBar v-if="isAuthenticated"/>
     <AlertComponent v-if="showAlert" :text="alertText" :alertColor="alertColor"/>
     <div class="flex container mx-auto gap-6 xl:gap-10 my-12" v-if="isAuthenticated">
       <SideBar/>
@@ -29,18 +29,18 @@ export default {
     loaderComponent
   },
   methods: {
-    fetchUser() {
+    async fetchUser() {
       const authStore = useAuthStore();
       try {
-        authStore.getUserDetails();
+        await authStore.getUserDetails();
         
       } catch (error) {
         console.error(error);
       }
     },
   },
-  created() {
-    this.fetchUser();
+  async created() {
+    await this.fetchUser();
   },
   computed: {
     isAuthenticated(){
