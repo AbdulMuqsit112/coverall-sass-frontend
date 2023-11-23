@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { useSchoolStore } from './school';
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     isAuthenticated: false,
@@ -20,19 +21,22 @@ export const useAuthStore = defineStore('auth', {
           token = urlParams.get("token");
           localStorage.setItem("token", token);
         }
-        const response = await this.$http.get('user/get/userInfo');
-        if (response.status == 200){
-          const fetchedUser = response.data;
-          this.user.firstName = fetchedUser.first_name;
-          this.user.lastName = fetchedUser.last_name;
-          this.user.email = fetchedUser.email;
-          this.user.role = fetchedUser.role;
-          this.user.districtId =  fetchedUser.district_id,
-          this.user.schoolId =  fetchedUser.school_id,
-          this.isAuthenticated = true;
+        if (token){
+          const response = await this.$http.get('user/get/userInfo');
+          if (response.status == 200){
+            const fetchedUser = response.data;
+            this.user.firstName = fetchedUser.first_name;
+            this.user.lastName = fetchedUser.last_name;
+            this.user.email = fetchedUser.email;
+            this.user.role = fetchedUser.role;
+            this.user.districtId =  fetchedUser.district_id,
+            this.user.schoolId =  fetchedUser.school_id,
+            this.isAuthenticated = true;
+          }
         }
       } catch (error) {
         console.error('Error fetching user details:', error);
+        useSchoolStore().setAlert(error, 'error')
         this.user = {
           firstName: '',
           lastName: '',
@@ -56,6 +60,8 @@ export const useAuthStore = defineStore('auth', {
           districtId: '',
           schoolId: ''
         };
+        const url = "http://localhost:8080/";
+        window.location.href = url;
     },
     async resetPassword(userID){
       try {

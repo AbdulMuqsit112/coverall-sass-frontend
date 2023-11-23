@@ -57,6 +57,18 @@ const routes = [
     name: 'GradesPage',
     component: () => import("@/views/GradesPage.vue"),
   },
+  {
+    path: '/displayContent',
+    exact: true,
+    name: 'DisplayContentPage',
+    component: () => import("@/views/DisplayContentPage.vue"),
+  },
+  {
+    path: '/content',
+    exact: true,
+    name: 'ContentPage',
+    component: () => import("@/views/ContentPage.vue"),
+  },
 
 ];
 

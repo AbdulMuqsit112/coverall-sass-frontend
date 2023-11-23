@@ -37,10 +37,11 @@
       :isAdd="false"
       @update-record="updatePolicy"
     />
-
+    <loaderComponent v-else/>
     <ModalComponent
       v-if="isAddPolicy"
       :inputFields="policyInputFields"
+      :textAreaFields="policyTextFields"
       :title="'Add Policy'"
       @close-modal="toggleAdminModal"
       @submited-data="addPolicy"
@@ -53,16 +54,20 @@ import ModalComponent from "@/components/ModalComponent.vue";
 import TableComponent from "@/components/TableComponent.vue";
 import { useSchoolStore } from "@/store/school";
 import { useAuthStore } from "@/store/auth";
+import loaderComponent from "@/components/loaderComponent.vue";
 export default {
   name: "PoliciesPage",
   components: {
     TableComponent,
     ModalComponent,
+    loaderComponent
   },
   data() {
     return {
       policyInputFields: [
         { id: 1, label: "name", value: "" },
+      ],
+      policyTextFields: [
         { id: 2, label: "description", value: "" },
       ],
       isAddPolicy: false,

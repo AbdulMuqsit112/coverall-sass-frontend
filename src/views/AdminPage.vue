@@ -11,16 +11,19 @@
       @delete-record="deleteAdmin"
       @update-record="updateAdmin"
     />
+    <loaderComponent v-else/>
   </div>
 </template>
 
 <script>
 import TableComponent from "@/components/TableComponent.vue";
+import loaderComponent from "@/components/loaderComponent.vue";
 import { useSchoolStore } from "@/store/school";
 export default {
   name: "AdminPage",
   components: {
     TableComponent,
+    loaderComponent
   },
   computed: {
     schoolAdmins() {

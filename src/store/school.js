@@ -12,6 +12,10 @@ export const useSchoolStore = defineStore('school', {
     gradesData: [],
     classes: [],
     gradesTeacher: [],
+    allContent: [],
+    teachContent: [],
+    teacherClasses: [],
+    menuList: [],
     alertText: '',
     alertColor: '',
     showAlert: false,
@@ -24,7 +28,11 @@ export const useSchoolStore = defineStore('school', {
     isContentAwaitApprovalLoaded: false,
     isGradesDataLoaded: false,
     isClassesLoaded: false,
-    isGradesTeacherLoaded: false
+    isGradesTeacherLoaded: false,
+    isAllContentLoaded: false,
+    isTeachContentLoaded: false,
+    isTeacherClassesLoaded: false,
+    isMenuListLoaded: false,
 
   }),
   actions: {
@@ -35,6 +43,20 @@ export const useSchoolStore = defineStore('school', {
       this.alertText = msg;
       this.alertColor = color;
       this.toggleAlert();
+    },
+
+    async fetchMenuList() {
+      this.isMenuListLoaded = false;
+      try {
+        const response = await this.$http.get('user/get/userInfo/menuItems');
+        if (response.status == 200) {
+          this.menuList = response.data
+          this.isMenuListLoaded = true;
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error fetching Menu:', error);
+      }
     },
     async fetchDistrictSchoolsData() {
       this.isDSchoolsLoaded = false;
@@ -91,7 +113,7 @@ export const useSchoolStore = defineStore('school', {
     async fetchStudentsClassTeachers() {
       this.isStudentClassTeachersLoaded = false;
       try {
-        const response = await this.$http.get('school/getStudentsClassTeachers');
+        const response = await this.$http.get('school/get/studentsClassTeachers');
         if (response.status == 200) {
           this.studentClassTeachers = response.data;
           this.isStudentClassTeachersLoaded = true;
@@ -104,7 +126,7 @@ export const useSchoolStore = defineStore('school', {
     async fetchPublishedContent() {
       this.isPublishedContentLoaded = false;
       try {
-        const response = await this.$http.get('video/getVideos/students');
+        const response = await this.$http.get('video/get/students');
         if (response.status == 200) {
           this.publishedContent = response.data;
           this.isPublishedContentLoaded = true;
@@ -117,7 +139,7 @@ export const useSchoolStore = defineStore('school', {
     async fetchContentAwaitingApproval() {
       this.isContentAwaitApprovalLoaded = false;
       try {
-        const response = await this.$http.get('video/getVideos/contentApprovers/contentWaitingApproval');
+        const response = await this.$http.get('video/get/contentApprovers/contentWaitingApproval');
         if (response.status == 200) {
           this.contentAwaitApproval = response.data;
           this.isContentAwaitApprovalLoaded = true;
@@ -156,7 +178,7 @@ export const useSchoolStore = defineStore('school', {
     async fetchGradesTeacher(id) {
       this.isGradesTeacherLoaded = false;
       try {
-        const response = await this.$http.get('/grade/schoolAdmin/getGradesTeachers', {params: { grade_id: id},});
+        const response = await this.$http.get('grade/schoolAdmin/getGradesTeachers', {params: { grade_id: id},});
         if (response.status == 200) {
           this.gradesTeacher = response.data;
           this.isGradesTeacherLoaded = true;
@@ -166,14 +188,53 @@ export const useSchoolStore = defineStore('school', {
         console.error('Error fetching This grade Teacher:', error);
       }
     },
-    
+    async fetchAllContent() {
+      this.isAllContentLoaded = false;
+      try {
+        const response = await this.$http.get('video/get/contentApprovers');
+        if (response.status == 200) {
+          this.allContent = response.data;
+          this.isAllContentLoaded = true;
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error fetching Content:', error);
+      }
+    },
+    async fetchTeachersContent() {
+      this.isTeachContentLoaded = false;
+      try {
+        const response = await this.$http.get('video/get/teachers');
+        if (response.status == 200) {
+          this.teachContent = response.data;
+          this.isTeachContentLoaded = true;
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error fetching Content:', error);
+      }
+    },
+    async fetchTeachersClasses() {
+      this.isTeacherClassesLoaded = false;
+      try {
+        const response = await this.$http.get('class/get/teachers');
+        if (response.status == 200) {
+          this.teacherClasses = response.data;
+          this.isTeacherClassesLoaded = true;
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error fetching Classes:', error);
+      }
+    },
+
 
     // Delete Requests
     async deleteDistrictSchool(id) {
       try {
         const response = await this.$http.delete('school/delete', {params: { school_id: id,},});
         if (response.status == 200) {
-          this.setAlert('Successfully Deleted', 'success');
+          this.setAlert('Successfully Deleted', 'info');
           await this.fetchDistrictSchoolsData();
         }
       } catch (error) {
@@ -185,7 +246,7 @@ export const useSchoolStore = defineStore('school', {
       try {
         const response = await this.$http.delete('user/delete', {params: { user_id: id,},});
         if (response.status == 200) {
-          this.setAlert('Successfully Deleted', 'success');
+          this.setAlert('Successfully Deleted', 'info');
           await this.fetchPeopleData(userType);
         }
       } catch (error) {
@@ -197,7 +258,7 @@ export const useSchoolStore = defineStore('school', {
       try {
         const response = await this.$http.delete('policy/delete', {params: { policy_id: id,},});
         if (response.status == 200) {
-          this.setAlert('Successfully Deleted', 'success');
+          this.setAlert('Successfully Deleted', 'info');
           await this.fetchDSchoolPolicies();
         }
       } catch (error) {
@@ -209,7 +270,7 @@ export const useSchoolStore = defineStore('school', {
       try {
         const response = await this.$http.delete('class/delete', {params: { class_id: id,},});
         if (response.status == 200) {
-          this.setAlert('Successfully Deleted', 'success');
+          this.setAlert('Successfully Deleted', 'info');
           await this.fetchClasses();
         }
       } catch (error) {
@@ -217,6 +278,19 @@ export const useSchoolStore = defineStore('school', {
         console.error('Error Deleting Class:', error);
       }
     },
+    async deleteContent(id) {
+      try {
+        const response = await this.$http.delete('video/delete', {params: { video_id: id,},});
+        if (response.status == 200) {
+          this.setAlert('Successfully Deleted', 'info');
+          await this.fetchTeachersContent();
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error Deleting Content:', error);
+      }
+    },
+
 
     // Update Requests
     async updateDistrictSchool(school) {
@@ -272,6 +346,22 @@ export const useSchoolStore = defineStore('school', {
         this.setAlert(error.message,'error')
         console.error('Error Updating Grades:', error);
       }
+    },
+    async approveDisapproveContent(id, reqType){
+      try {
+        const params = new URLSearchParams();
+        params.append('video_id', id);
+        const response = await this.$http.put(`video/${reqType}`, null, {
+          params: params
+        });
+        if (response.status === 200) {
+          this.setAlert('Successfully Updated', 'success');
+          await this.fetchAllContent();
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error Updating Content Status:', error);
+      }
     },    
 
     // Create Requests
@@ -322,6 +412,18 @@ export const useSchoolStore = defineStore('school', {
         this.setAlert(error.message,'error')
         console.error('Error Creating Grade:', error);
       }
+    },
+    async createContent(contentObj) {
+      try {
+        const response = await this.$http.post('video/create', contentObj);
+        if (response.status == 200) {
+          this.setAlert('Successfully Added', 'success');
+          await this.fetchTeachersContent();
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error Creating Content:', error);
+      }
     }
 
   },
@@ -348,6 +450,14 @@ export const useSchoolStore = defineStore('school', {
     getclassesData: (state) => state.classes,
     getIsClassesLoaded: (state) => state.isClassesLoaded,
     getGradesTeachers: (state) => state.gradesTeacher,
-    getIsGradesTeachersLoaded: (state) => state.isGradesTeacherLoaded,
+    getIsGradesTeachersLoaded: (state) => state.isGradesTeacherLoaded,    
+    getAllContent: (state) => state.allContent,
+    getIsAllContentLoaded: (state) => state.isAllContentLoaded,    
+    getTeachContent: (state) => state.teachContent,
+    getIsTeachContentLoaded: (state) => state.isTeachContentLoaded,    
+    getTeacherClasses: (state) => state.teacherClasses,
+    getIsTeacherClassesLoaded: (state) => state.isTeacherClassesLoaded,
+    getMenuList: (state) => state.menuList,
+    getIsMenuListLoaded: (state) => state.isMenuListLoaded,
   },
 });

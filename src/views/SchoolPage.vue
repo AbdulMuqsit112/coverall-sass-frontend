@@ -20,7 +20,7 @@
       @update-record="updateDSchool"
       @add-record="toggleDSchoolModal"
     />
-
+    <loaderComponent v-else/>
     <ModalComponent
       v-if="isAddDSchool"
       :inputFields="districtSchoolInputFields"
@@ -34,12 +34,14 @@
 <script>
 import ModalComponent from "@/components/ModalComponent.vue";
 import TableComponent from "@/components/TableComponent.vue";
+import loaderComponent from "@/components/loaderComponent.vue";
 import { useSchoolStore } from "@/store/school";
 export default {
   name: "SchoolPage",
   components: {
     TableComponent,
     ModalComponent,
+    loaderComponent
   },
   data() {
     return {

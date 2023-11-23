@@ -15,6 +15,7 @@
     :isAdd="false" 
     @delete-record="deleteStudents"
     />
+    <loaderComponent v-else/>
   </div>
 </template>
   
@@ -22,10 +23,12 @@
 import TableComponent from "@/components/TableComponent.vue";
 import { useSchoolStore } from "@/store/school";
 import { useAuthStore } from "@/store/auth";
+import loaderComponent from "@/components/loaderComponent.vue";
 export default {
   name: "StudentsPage",
   components: {
     TableComponent,
+    loaderComponent
   },
   computed: {
     studentsData() {

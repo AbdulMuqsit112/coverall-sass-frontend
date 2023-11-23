@@ -1,17 +1,25 @@
 <template>
   <div class="main-tile flex p-4 w-[68rem]">
-    <!-- Students -->
+    <!-- Classes -->
     <TableComponent
-      v-if="isClasses"
+      v-if="isClasses && userRole == 'school admin'"
       :columns="['id', 'name', 'grade_name', 'teacher_name']"
       :data="classesData"
-      :isDelete="userRole == 'school admin'"
+      :isDelete="true"
       :title="'Classes'"
       :isAdd="true"
       @add-record="toggleModal"
       @delete-record="deleteClasses"
     />
-
+    <TableComponent
+      v-else-if="isStudentClasses && userRole == 'student'"
+      :columns="['id', 'class_name', 'teacher_name']"
+      :data="studentClasses"
+      :isDelete="false"
+      :isEnrolled="true"
+      :title="'Classes'"
+    />
+    <loaderComponent v-else />
     <ModalComponent
       v-if="isAddClass"
       :inputFields="classInputFields"
@@ -29,6 +37,7 @@
 <script>
 import TableComponent from "@/components/TableComponent.vue";
 import ModalComponent from "@/components/ModalComponent.vue";
+import loaderComponent from "@/components/loaderComponent.vue";
 import { useSchoolStore } from "@/store/school";
 import { useAuthStore } from "@/store/auth";
 export default {
@@ -36,6 +45,7 @@ export default {
   components: {
     TableComponent,
     ModalComponent,
+    loaderComponent,
   },
   data() {
     return {
@@ -55,8 +65,17 @@ export default {
     userRole() {
       return useAuthStore().getUser.role;
     },
+    studentClasses() {
+      return useSchoolStore().getStudentClassTeachers;
+    },
+    isStudentClasses() {
+      return useSchoolStore().getIsStudentClassTeachersLoaded;
+    },
   },
   methods: {
+    fetchStudentsClassTeachers() {
+      useSchoolStore().fetchStudentsClassTeachers();
+    },
     fetchClasses() {
       useSchoolStore().fetchClasses();
     },
@@ -94,7 +113,9 @@ export default {
       let option = {
         id: 1,
         label: "Teachers",
-        selectedOption: useSchoolStore().getIsGradesTeachersLoaded ? opt[0].value : "",
+        selectedOption: useSchoolStore().getIsGradesTeachersLoaded
+          ? opt[0].value
+          : "",
         options: opt,
       };
       this.conditionalDropdowns.push(option);
@@ -103,7 +124,7 @@ export default {
       useSchoolStore().deleteClass(id);
     },
     async toggleModal() {
-      if (!this.isAddClass){
+      if (!this.isAddClass) {
         this.generateGradeOptions();
       } else {
         this.conditionalDropdowns = [];
@@ -116,15 +137,17 @@ export default {
       let params = {
         name: data.name,
         grade_id: grade.selectedOption,
-        user_id: teacher.selectedOption
+        user_id: teacher.selectedOption,
       };
       useSchoolStore().createClasses(params);
       this.toggleModal();
     },
   },
   created() {
-    this.fetchClasses();
-    this.fetchGrades();
+    if (this.userRole == "school admin") {
+      this.fetchClasses();
+      this.fetchGrades();
+    } else if (this.userRole == "student") this.fetchStudentsClassTeachers();
   },
 };
 </script>

@@ -10,7 +10,7 @@
       :isAdd="true"
       @add-record="toggleModal"
     />
-
+    <loaderComponent v-else/>
     <ModalComponent
       v-if="isAddGrade"
       :inputFields="gradeInputFields"
@@ -24,13 +24,15 @@
 <script>
 import TableComponent from "@/components/TableComponent.vue";
 import ModalComponent from "@/components/ModalComponent.vue";
+import loaderComponent from "@/components/loaderComponent.vue";
 import { useSchoolStore } from "@/store/school";
 import { useAuthStore } from "@/store/auth";
 export default {
-  name: "ClassesPage",
+  name: "GradesPage",
   components: {
     TableComponent,
     ModalComponent,
+    loaderComponent
   },
   data() {
     return {

@@ -1,12 +1,12 @@
 <template>
-  <div class="overflow-scroll p-4 bg-white rounded-lg h-[40rem]">
+  <div class="overflow-scroll p-4 bg-white rounded-lg h-[50rem]">
     <div class="flex justify-between w-full">
       <span class="text-xl font-black">{{ title }}</span>
-      <div class="flex gap-4 py-4">
+      <div class="flex gap-4 pt-4">
         <div class="relative">
           <input
             v-model="searchQuery"
-            class="mb-4 px-4 py-1 w-[30rem] rounded-3xl bg-[#F8F8F8]"
+            class="px-4 py-1 w-[30rem] rounded-3xl bg-[#F8F8F8]"
             placeholder="Search"
           />
           <img
@@ -24,7 +24,9 @@
         </button>
       </div>
     </div>
-    <table class="table overflow-scroll table-fixed w-full">
+    <div v-if="isEnrolled" class="text-lg font-normal text-[#00000099]">You are enrolled in <span class="font-black text-black">class 8</span>
+    </div>
+    <table class="table overflow-scroll table-fixed w-full mt-6">
       <thead>
         <tr>
           <th
@@ -101,6 +103,15 @@
               </span>
               </div>
             </template>
+            <template v-else-if="column == 'youtube_link'">
+              <div class="flex justify-center text-xs cursor-pointer" @click="openLink(item[column])">
+                {{ item[column] }}              
+                <img
+                  src="@/assets/icons/openLink.svg"
+                  alt="delete"
+                />
+              </div>
+            </template>
             <template v-else>
               <span :class="getSpanClass(column, item[column])">{{ item[column] }}</span>
             </template>
@@ -146,6 +157,7 @@ export default {
     },
     isDelete: {
       type: Boolean,
+      default: () => false,
     },
     isReset: {
       type: Boolean,
@@ -164,6 +176,10 @@ export default {
     gradeData: {
       type: Array,
       default: () => [],
+    },
+    isEnrolled: {
+      type: Boolean,
+      default: () => false,
     },
     
   },
@@ -189,6 +205,8 @@ export default {
         return ["District", "Regular"];
       } else if (column == "policy_status") {
         return ["blacklist", "whitelist"];
+      } else if (column == "video_status") {
+        return ["disapproved", "approved"];
       } else if (column == "grade_name") {
         return this.gradeData;
       } else {
@@ -229,14 +247,22 @@ export default {
           return "Id";
         case "students_count":
           return "Total Students";
+        case "class_name":
+          return "Class";
+        case "youtube_link":
+          return "Youtube Link";
+        case "video_id":
+          return "Id";
+        case "video_status":
+          return "Video Status";
         default:
           return colName.charAt(0).toUpperCase() + colName.slice(1);
       }
     },
     getDropdownClass(value, column) {
-      if (value == "enabled" || value == "whitelist") {
+      if (value == "enabled" || value == "whitelist" || value =='approved') {
         return "px-2 py-2 my-1 block text-xs rounded-lg bg-green-200 text-green-500";
-      } else if (value == "disabled" || value == "blacklist") {
+      } else if (value == "disabled" || value == "blacklist" || value == 'disapproved') {
         return "px-2 py-2 my-1 block text-xs rounded-lg bg-red-100 text-red-500";
       } else if (column == 'grade_name') {
         return "py-2 my-1 block text-xs rounded-lg bg-[#F3F3F3]";
@@ -257,7 +283,11 @@ export default {
         "Are you sure you want to delete this record?"
       );
       if (confirmDelete) {
-        this.$emit("delete-record", record.id);
+        if (record.id){
+          this.$emit("delete-record", record.id);
+        } else {
+          this.$emit("delete-record", record.video_id);
+        }
       }
     },
     addRecord() {
@@ -292,6 +322,9 @@ export default {
       } else {
         return false;
       }
+    },
+    openLink(link) {
+      window.open(link, "_blank");
     },
   },
   computed: {
