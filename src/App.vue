@@ -3,7 +3,7 @@
     <TopBar v-if="isAuthenticated"/>
     <AlertComponent v-if="showAlert" :text="alertText" :alertColor="alertColor"/>
     <div class="flex container mx-auto gap-6 xl:gap-10 my-12" v-if="isAuthenticated">
-      <SideBar/>
+      <SideBar v-if="isMenuItems"/>
       <router-view></router-view>
     </div>
     <loaderComponent v-else/>
@@ -38,6 +38,14 @@ export default {
         console.error(error);
       }
     },
+    async fetchMenuList() {
+      const schoolStore = useSchoolStore();
+      try {
+        await schoolStore.fetchMenuList();
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
   async created() {
     await this.fetchUser();
@@ -55,6 +63,16 @@ export default {
     alertColor(){
       return useSchoolStore().getAlertColor;
     },
+    isMenuItems(){
+      return useSchoolStore().getIsMenuListLoaded;
+    }
+  },
+  watch: {
+    isAuthenticated(val){
+      if (val){
+        this.fetchMenuList();
+      }
+    }
   }
 }
 </script>

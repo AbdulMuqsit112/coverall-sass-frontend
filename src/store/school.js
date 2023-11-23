@@ -15,6 +15,7 @@ export const useSchoolStore = defineStore('school', {
     allContent: [],
     teachContent: [],
     teacherClasses: [],
+    menuList: [],
     alertText: '',
     alertColor: '',
     showAlert: false,
@@ -31,6 +32,7 @@ export const useSchoolStore = defineStore('school', {
     isAllContentLoaded: false,
     isTeachContentLoaded: false,
     isTeacherClassesLoaded: false,
+    isMenuListLoaded: false,
 
   }),
   actions: {
@@ -41,6 +43,20 @@ export const useSchoolStore = defineStore('school', {
       this.alertText = msg;
       this.alertColor = color;
       this.toggleAlert();
+    },
+
+    async fetchMenuList() {
+      this.isMenuListLoaded = false;
+      try {
+        const response = await this.$http.get('user/get/userInfo/menuItems');
+        if (response.status == 200) {
+          this.menuList = response.data
+          this.isMenuListLoaded = true;
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error fetching Menu:', error);
+      }
     },
     async fetchDistrictSchoolsData() {
       this.isDSchoolsLoaded = false;
@@ -440,6 +456,8 @@ export const useSchoolStore = defineStore('school', {
     getTeachContent: (state) => state.teachContent,
     getIsTeachContentLoaded: (state) => state.isTeachContentLoaded,    
     getTeacherClasses: (state) => state.teacherClasses,
-    getIsTeacherClassesLoaded: (state) => state.isTeacherClassesLoaded,    
+    getIsTeacherClassesLoaded: (state) => state.isTeacherClassesLoaded,
+    getMenuList: (state) => state.menuList,
+    getIsMenuListLoaded: (state) => state.isMenuListLoaded,
   },
 });

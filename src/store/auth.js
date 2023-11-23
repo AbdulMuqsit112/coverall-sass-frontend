@@ -22,13 +22,7 @@ export const useAuthStore = defineStore('auth', {
           localStorage.setItem("token", token);
         }
         if (token){
-          const response = await this.$http.get('user/get/userInfo', {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-              "ngrok-skip-browser-warning": "69420"
-            }
-          });
+          const response = await this.$http.get('user/get/userInfo');
           if (response.status == 200){
             const fetchedUser = response.data;
             this.user.firstName = fetchedUser.first_name;
@@ -66,6 +60,8 @@ export const useAuthStore = defineStore('auth', {
           districtId: '',
           schoolId: ''
         };
+        const url = "http://localhost:8080/";
+        window.location.href = url;
     },
     async resetPassword(userID){
       try {
