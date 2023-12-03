@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap py-2 gap-6 justify-center xl:gap-8 xl:h-44">
+  <div class="flex flex-wrap py-2 gap-6 justify-center xl:gap-8 2xl:gap-10 xl:h-44">
     <ColumnChart/>
     <PolicyViolations/>
     <DeviceBreakdown/>

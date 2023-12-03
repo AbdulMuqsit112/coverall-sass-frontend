@@ -16,6 +16,7 @@ export const useSchoolStore = defineStore('school', {
     teachContent: [],
     teacherClasses: [],
     menuList: [],
+    teacherGrades: [],
     alertText: '',
     alertColor: '',
     showAlert: false,
@@ -33,6 +34,7 @@ export const useSchoolStore = defineStore('school', {
     isTeachContentLoaded: false,
     isTeacherClassesLoaded: false,
     isMenuListLoaded: false,
+    isTeacherGradesLoaded: false,
 
   }),
   actions: {
@@ -227,6 +229,20 @@ export const useSchoolStore = defineStore('school', {
         console.error('Error fetching Classes:', error);
       }
     },
+    async fetchTeachersGrades() {
+      this.isTeacherGradesLoaded = false;
+      try {
+        const response = await this.$http.get('grade/getGrades');
+        if (response.status == 200) {
+          this.teacherGrades = response.data;
+          this.isTeacherGradesLoaded = true;
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error fetching Grades:', error);
+      }
+    },
+
 
 
     // Delete Requests
@@ -424,6 +440,18 @@ export const useSchoolStore = defineStore('school', {
         this.setAlert(error.message,'error')
         console.error('Error Creating Content:', error);
       }
+    },
+    async createStudent(studentObj) {
+      try {
+        const response = await this.$http.post('user/signup', studentObj);
+        if (response.status == 200) {
+          this.setAlert('Successfully Added', 'success');
+          await this.fetchPeopleData('student');
+        }
+      } catch (error) {
+        this.setAlert(error.message,'error')
+        console.error('Error Creating Student:', error);
+      }
     }
 
   },
@@ -459,5 +487,7 @@ export const useSchoolStore = defineStore('school', {
     getIsTeacherClassesLoaded: (state) => state.isTeacherClassesLoaded,
     getMenuList: (state) => state.menuList,
     getIsMenuListLoaded: (state) => state.isMenuListLoaded,
+    getTeacherGrades: (state) => state.teacherGrades,
+    getIsTeacherGradesLoaded: (state) => state.isTeacherGradesLoaded,
   },
 });

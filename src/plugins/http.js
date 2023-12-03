@@ -2,7 +2,7 @@ import axios from 'axios';
 import pinia from '@/store/pinia.js';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://6b96-2400-adc1-49e-3300-50e8-b859-a890-6537.ngrok-free.app/sas/v1/',
+  baseURL: 'https://9cd0-2400-adc1-49e-3300-d007-5616-7a89-f8d2.ngrok-free.app/sas/v1/',
   headers: {
     'Content-Type': 'application/json',
     'ngrok-skip-browser-warning': '69420',

@@ -1,5 +1,5 @@
 <template>
-  <div class="tile px-6 xl:px-4">
+  <div class="tile px-6 xl:px-4 2xl:px-8 2xl:py-14">
     <p class="py-2 text-sm font-Montserrat text-center">Device Breakdown</p>
     <apexchart type="pie" :series="series" width="170" height="120" :options="options"></apexchart>
   </div>

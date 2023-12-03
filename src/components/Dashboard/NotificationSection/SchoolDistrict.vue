@@ -1,5 +1,5 @@
 <template>
-  <div class="tile flex flex-wrap flex-col gap-6 px-4 xl:h-64 md:w-[30rem] xl:w-[28.2rem]">
+  <div class="tile flex flex-wrap flex-col gap-6 px-4 xl:h-64 md:w-[30rem] xl:w-[28.2rem] 2xl:w-[33rem]">
     <div class="flex justify-between">
       <div class="flex gap-2">
         <p class="font-Montserrat">District Schools</p>

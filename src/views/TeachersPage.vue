@@ -7,7 +7,7 @@
         'id',
         'full_name',
         'email',
-        'grade_name',
+        // 'grade_name',
         'Password Reset',
         'status'
       ]"

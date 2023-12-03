@@ -4,6 +4,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     isAuthenticated: false,
     user: {
+      id: '',
       firstName: '',
       lastName: '',
       email: '',
@@ -25,6 +26,7 @@ export const useAuthStore = defineStore('auth', {
           const response = await this.$http.get('user/get/userInfo');
           if (response.status == 200){
             const fetchedUser = response.data;
+            this.user.id = fetchedUser.id;
             this.user.firstName = fetchedUser.first_name;
             this.user.lastName = fetchedUser.last_name;
             this.user.email = fetchedUser.email;
@@ -75,6 +77,25 @@ export const useAuthStore = defineStore('auth', {
         }
       } catch (error) {
         console.error('Error Resetting Password:', error);
+      }
+    },
+    async updateUserInfo(user){
+      try {
+        const params = new URLSearchParams();
+        params.append('user_id', this.user.id);
+        params.append('password', user.password);
+        params.append('first_name', user.fName);
+        params.append('last_name', user.lName);
+        const response = await this.$http.post('user/passwordChange', null, {
+          params: params
+        });
+        if (response.status == 200) {
+          console.error('USER Info Updated Successfully');
+          useSchoolStore().setAlert('Updated Successfully', 'success');
+          this.getUserDetails();
+        }
+      } catch (error) {
+        console.error('Error Updating USER Info:', error);
       }
     }
   },

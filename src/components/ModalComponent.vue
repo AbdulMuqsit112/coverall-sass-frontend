@@ -12,15 +12,19 @@
         <form @submit.prevent="submitForm">
           <div class="modal-body p-4">
             <!-- Render input fields -->
-            <div class="">
+            <div class="flex flex-wrap">
               <div
                 v-for="field in inputFields"
                 :key="field.id"
-                class="mb-4 ml-4 gap-6 flex"
+                class="mb-4 ml-4 flex items-center"
               >
-                <label class="mb-2 mr-5">{{ field.label }}</label>
+                <label
+                  class="block mb-2 mr-2 w-32"
+                  :style="{ width: field.labelWidth + 'px' }"
+                  >{{ field.label }}</label
+                >
                 <input
-                  type="text"
+                  :type="field.type || 'text'"
                   v-model="field.value"
                   class="bg-[#f8f8f8] rounded-md px-2 py-1 w-64"
                 />
@@ -32,7 +36,7 @@
               <div
                 v-for="field in textAreaFields"
                 :key="field.id"
-                class="mb-4 gap-6 flex"
+                class="mb-4 gap-6 flex items-center"
               >
                 <label class="mt-4">{{ field.label }}</label>
                 <textarea
@@ -70,9 +74,9 @@
               <div
                 v-for="dropdown in dropdownOptions"
                 :key="dropdown.id"
-                class="mb-4 ml-4 gap-6 flex"
+                class="mb-4 ml-4 flex items-center"
               >
-                <label class="mb-2 mr-5">{{ dropdown.label }}</label>
+                <label class="mb-2 mr-2 w-32">{{ dropdown.label }}</label>
                 <select
                   v-model="dropdown.selectedOption"
                   class="border border-black rounded px-6 py-1"
@@ -91,9 +95,9 @@
               <div
                 v-for="dropdown in conditionalDropdowns"
                 :key="dropdown.id"
-                class="mb-4 ml-4 gap-6 flex"
+                class="mb-4 ml-4 gap-6 flex items-center"
               >
-                <label class="mb-2">{{ dropdown.label }}</label>
+                <label class="mb-2 w-32">{{ dropdown.label }}</label>
                 <select
                   v-model="dropdown.selectedOption"
                   class="border border-black rounded px-6 py-1"
@@ -185,7 +189,7 @@ export default {
         }, {});
         formData = {
           ...formData,
-          ...textAreaData
+          ...textAreaData,
         };
       }
       if (this.dropdownOptions.length > 0) {
@@ -200,7 +204,6 @@ export default {
           dropDownData,
         };
       }
-
       if (this.conditionalDropdowns.length > 0) {
         let condDropdown = this.conditionalDropdowns.map((obj) => {
           const label = obj.label;

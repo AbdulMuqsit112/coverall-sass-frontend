@@ -107,7 +107,7 @@ export default {
         teachers = useSchoolStore().getGradesTeachers;
         opt = teachers.map((item) => ({
           label: item.teacher_name,
-          value: item.teacher_user_id,
+          value: item.teacher_id,
         }));
       }
       let option = {
