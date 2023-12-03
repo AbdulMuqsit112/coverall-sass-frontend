@@ -4,7 +4,7 @@
     <PoliciesBoard v-if="isPoliciesLoaded"/>
   </div>
 </template>
-        
+
 <script>
 import PeopleCard from './PeopleCard.vue';
 import PoliciesBoard from './PoliciesBoard.vue';

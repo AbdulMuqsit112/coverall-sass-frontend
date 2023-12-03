@@ -1,5 +1,5 @@
 <template>
-  <div class="tile px-6 xl:px-4">
+  <div class="tile px-6 xl:px-4 2xl:px-8 2xl:py-14">
     <p class="pt-2 text-sm font-Montserrat text-center">Bandwidth Usage</p>
     <apexchart type="area" width="180" height="120" :options="options" :series="series"></apexchart>
   </div>

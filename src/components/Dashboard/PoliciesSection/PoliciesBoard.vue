@@ -2,7 +2,7 @@
   <div class="tile flex flex-wrap flex-col gap-6 h-44 px-4 md:w-[30rem] xl:w-[28.2rem]">
     <div class="flex justify-between">
       <p class="font-Montserrat text-center">Policies</p>
-      <button class="rounded-lg text-white text-xs bg-blue-400 mt-1 px-3 py-1">Manage</button>
+      <router-link to="/policies" class="rounded-lg text-white text-xs bg-blue-400 mt-1 px-3 py-1">Manage</router-link>
     </div>
     <div class="flex gap-10">
       <div class="flex flex-col gap-2">

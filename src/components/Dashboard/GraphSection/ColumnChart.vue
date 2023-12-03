@@ -1,5 +1,5 @@
 <template>
-  <div class="tile text-center px-6 xl:px-4 ">
+  <div class="tile text-center px-6 xl:px-4 2xl:px-8 2xl:py-14">
     <p class="text-sm">Content Access Breakdown</p>
     <p class="font-black text-xs ">Top 3</p>
     <apexchart width="180" height="100" type="bar" :options="options" :series="series"></apexchart>

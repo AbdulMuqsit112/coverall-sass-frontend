@@ -8,9 +8,9 @@
           <p class="text-white text-xs mt-[0.2rem]">{{ peopleData.length }}</p>
         </div>
       </div>
-      <button class="rounded-lg text-white text-xs bg-blue-400 px-3 py-1">
+      <router-link :to="url" class="rounded-lg text-white text-xs bg-blue-400 px-3 py-1">
         Manage
-      </button>
+      </router-link>
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div class="flex gap-3" v-for="person in peopleData" :key="person">
@@ -39,6 +39,7 @@ export default {
       cardTitle: "",
       peopleData: [],
       role: "",
+      url: ""
     };
   },
   methods: {
@@ -50,6 +51,7 @@ export default {
         this.cardTitle = "School Administrators";
       } else if (this.role == "school admin") {
         this.cardTitle = "School Teachers";
+        this.url = "/teachers"
       } else if (this.role == "teacher"){
         this.cardTitle = "Students";
       }
