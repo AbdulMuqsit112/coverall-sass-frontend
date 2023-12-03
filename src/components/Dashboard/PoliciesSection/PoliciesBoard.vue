@@ -1,5 +1,5 @@
 <template>
-  <div class="tile flex flex-wrap flex-col gap-6 h-44 px-4 md:w-[30rem] xl:w-[28.2rem]">
+  <div class="tile flex flex-wrap flex-col gap-6 h-44 px-4 md:w-[30rem] xl:w-[28.2rem] 2xl:w-[33rem]">
     <div class="flex justify-between">
       <p class="font-Montserrat text-center">Policies</p>
       <router-link to="/policies" class="rounded-lg text-white text-xs bg-blue-400 mt-1 px-3 py-1">Manage</router-link>

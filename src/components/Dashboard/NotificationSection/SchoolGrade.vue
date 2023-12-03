@@ -4,7 +4,7 @@
       'h-64 xl:w-[28.2rem]': role !== 'student',
       'h-40 xl:w-[30rem]': role === 'student',
     }"
-    class="tile flex-col flex-wrap  flex px-4 md:w-[30rem] gap-8"
+    class="tile flex-col flex-wrap  flex px-4 md:w-[30rem] 2xl:w-[33rem] gap-8"
   >
     <div class="flex justify-between">
       <div class="flex gap-2">

@@ -13,10 +13,21 @@
             Upload Image
           </button>
         </div>
-        <form class="flex flex-col items-center gap-12">
+        <form class="flex flex-col items-center gap-12" @submit.prevent="submit()">
           <div class="flex flex-col gap-1">
-            <label for="name" class="text-left">Name</label>
+            <label for="name" class="text-left">First Name</label>
             <input
+              v-model="fName"
+              type="text"
+              name="name"
+              id="name"
+              class="border bg-[#F2F2F2] w-96 rounded-lg py-1"
+            />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="name" class="text-left">Last Name</label>
+            <input
+              v-model="lName"
               type="text"
               name="name"
               id="name"
@@ -30,6 +41,7 @@
               name="password"
               id="password"
               class="border bg-[#F2F2F2] w-96 rounded-lg py-1"
+              v-model="password"
             />
           </div>
           <div class="flex flex-col gap-1">
@@ -39,6 +51,7 @@
               name="confirm_password"
               id="Confirm_password"
               class="border bg-[#F2F2F2] w-96 rounded-lg py-1"
+              v-model="cPassword"
             />
           </div>
           <div class="flex justify-between w-full">
@@ -48,7 +61,7 @@
             >
               Go Back
             </router-link>
-            <button class="bg-blue-400 text-white pt-1 pb-1 px-6 rounded-lg">
+            <button action="submit" class="bg-blue-400 text-white pt-1 pb-1 px-6 rounded-lg">
               Submit
             </button>
           </div>
@@ -56,93 +69,39 @@
       </div>
     </div>
   </div>
-  <ModalComponent
-    :inputFields="inputFields"
-    :radioButtons="radioButtons"
-    :dropdownOptions="dropdownOptions"
-  />
 </template>
 
 <script>
-import ModalComponent from "@/components/ModalComponent.vue";
+import { useAuthStore } from '@/store/auth';
+import { useSchoolStore } from '@/store/school';
 export default {
   name: "ProfilePage",
   components: {
-    ModalComponent,
   },
-  data() {
+  data(){
     return {
-      inputFields: [
-        { id: 1, label: "Name", value: "" },
-        { id: 2, label: "Email", value: "" },
-        { id: 3, label: "Phone", value: "" },
-      ],
-      // Define an array of objects for the radioButtons prop
-      radioButtons: [
-        {
-          id: 1, // A unique identifier for each radio group
-          label: "Choose your favorite color", // A label for the radio group
-          options: [
-            // An array of objects for each option
-            {
-              value: "red", // A value for the option
-              label: "Red", // A label for the option
-            },
-            {
-              value: "green",
-              label: "Green",
-            },
-            {
-              value: "blue",
-              label: "Blue",
-            },
-          ],
-          selectedOption: null, // A property to store the selected option
-        },
-        {
-          id: 2,
-          label: "Choose your favorite animal",
-          options: [
-            {
-              value: "cat",
-              label: "Cat",
-            },
-            {
-              value: "dog",
-              label: "Dog",
-            },
-            {
-              value: "bird",
-              label: "Bird",
-            },
-          ],
-          selectedOption: null,
-        },
-      ],
-      dropdownOptions: [
-        {
-          id: 1,
-          label: "Select Color",
-          selectedOption: "red",
-          options: [
-            { label: "Red", value: "red" },
-            { label: "Green", value: "green" },
-            { label: "Blue", value: "blue" },
-          ],
-        },
-        {
-          id: 2,
-          label: "Select Size",
-          selectedOption: "medium",
-          options: [
-            { label: "Small", value: "small" },
-            { label: "Medium", value: "medium" },
-            { label: "Large", value: "large" },
-          ],
-        },
-      ],
-    };
+      fName: useAuthStore().getUser.firstName,
+      lName: useAuthStore().getUser.lastName,
+      cPassword: "",
+      password: "",
+    }
   },
+  methods:{
+    submit(){
+      if (this.cPassword == this.password){
+        let user = {
+          password: this.password,
+          fName: this.fName,
+          lName: this.lName
+        }
+        useAuthStore().updateUserInfo(user);
+        return;
+      }
+      useSchoolStore().setAlert("Password Mismatched", "error")
+    },
+  },
+
+
 };
 </script>
 

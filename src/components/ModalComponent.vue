@@ -204,7 +204,6 @@ export default {
           dropDownData,
         };
       }
-
       if (this.conditionalDropdowns.length > 0) {
         let condDropdown = this.conditionalDropdowns.map((obj) => {
           const label = obj.label;
