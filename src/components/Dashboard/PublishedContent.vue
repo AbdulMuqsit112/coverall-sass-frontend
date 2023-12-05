@@ -1,8 +1,8 @@
 <template>
-  <div class="tile flex flex-wrap flex-colgap-6 px-4 md:w-[30rem] xl:w-[60rem]">
+  <div class="tile flex flex-wrap flex-colgap-6 px-4 md:w-[30rem] xl:w-[58.5rem] 2xl:w-[70rem]">
     <div class="flex justify-between w-full mt-2">
       <p class="font-Montserrat">{{ titleText }}</p>
-      <button class="rounded-lg text-white text-xs bg-blue-400 px-3 py-1">View all</button>
+      <router-link to="/displayContent" class="rounded-lg text-white text-xs bg-blue-400 px-3 py-1">View all</router-link>
     </div>
     <div :class="{ 'justify-center gap-20 py-10': userRole == 'student', 'gap-2': userRole != 'student',
     }" class="flex mt-4">

@@ -2,7 +2,7 @@
   <div
     :class="{
       'h-64 xl:w-[28.2rem]': role !== 'student',
-      'h-40 xl:w-[30rem]': role === 'student',
+      'h-40 xl:w-[28.5rem]': role === 'student',
     }"
     class="tile flex-col flex-wrap  flex px-4 md:w-[30rem] 2xl:w-[33rem] gap-8"
   >
@@ -10,9 +10,9 @@
       <div class="flex gap-2">
         <p class="font-Montserrat">{{ TextTitle }}</p>
       </div>
-      <button class="rounded-lg text-white text-xs bg-blue-400 px-3 py-1">
+      <router-link to="/grades" class="rounded-lg text-white text-xs bg-blue-400 px-3 py-1">
         Manage
-      </button>
+      </router-link>
     </div>
     <div class="flex flex-wrap gap-12">
       <div class="flex gap-3" v-for="st in data" :key="st">
@@ -53,7 +53,7 @@ export default {
   methods: {
     getDistrictSchools() {
       let students = useSchoolStore().getSchoolStudents;
-      this.data = students.slice(0, 4);
+      this.data = students.slice(0, 3);
     },
     getStudentClassTeacher() {
       let teachers = useSchoolStore().getStudentClassTeachers;

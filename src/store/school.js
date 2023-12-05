@@ -441,16 +441,16 @@ export const useSchoolStore = defineStore('school', {
         console.error('Error Creating Content:', error);
       }
     },
-    async createStudent(studentObj) {
+    async createUser(useObj, userType) {
       try {
-        const response = await this.$http.post('user/signup', studentObj);
+        const response = await this.$http.post('user/signup', useObj);
         if (response.status == 200) {
           this.setAlert('Successfully Added', 'success');
-          await this.fetchPeopleData('student');
+          await this.fetchPeopleData(userType);
         }
       } catch (error) {
         this.setAlert(error.message,'error')
-        console.error('Error Creating Student:', error);
+        console.error('Error Creating User:', error);
       }
     }
 

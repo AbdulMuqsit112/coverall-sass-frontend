@@ -13,7 +13,7 @@
     :isDelete="userRole == 'school admin'"
     :title="'School Students'" 
     :isAdd="true"
-    @add-record="toggleModal" 
+    @add-record="toggleModal"
     @delete-record="deleteStudents"
     />
     <ModalComponent
@@ -105,7 +105,7 @@ export default {
           role: 'student',
           grade_id: dData.selectedOption
         };
-        useSchoolStore().createStudent(params);
+        useSchoolStore().createUser(params, 'student');
       }
       this.toggleModal();
     },
