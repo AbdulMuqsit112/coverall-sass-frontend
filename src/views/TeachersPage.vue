@@ -30,7 +30,7 @@
       :inputFields="studentInputFields"
       :title="'Add Teacher'"
       @close-modal="toggleModal"
-      @submited-data="addStudents"
+      @submited-data="addTeacher"
     />
   </div>
 </template>
@@ -107,7 +107,7 @@ export default {
         console.log("Something Went Wrong");
       }
     },
-    addStudents(teacher){
+    addTeacher(teacher){
       if (teacher){
         let params = {
           first_name: teacher.first_name,
