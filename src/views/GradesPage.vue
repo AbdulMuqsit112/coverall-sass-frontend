@@ -7,7 +7,7 @@
       :data="gradesData"
       :isDelete="false"
       :title="'Grades'"
-      :isAdd="true"
+      :isAdd="userRole == 'school admin'"
       @add-record="toggleModal"
     />
     <loaderComponent v-else/>

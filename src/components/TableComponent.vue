@@ -105,7 +105,7 @@
             </template>
             <template v-else-if="column == 'youtube_link'">
               <div class="flex justify-center text-xs cursor-pointer" @click="openLink(item[column])">
-                {{ item[column] }}              
+                {{ item[column].slice(0,20) }}              
                 <img
                   src="@/assets/icons/openLink.svg"
                   alt="delete"

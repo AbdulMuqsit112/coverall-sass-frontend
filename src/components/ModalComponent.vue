@@ -95,9 +95,9 @@
               <div
                 v-for="dropdown in conditionalDropdowns"
                 :key="dropdown.id"
-                class="mb-4 ml-4 gap-6 flex items-center"
+                class="mb-4 ml-4 flex items-center"
               >
-                <label class="mb-2 w-32">{{ dropdown.label }}</label>
+                <label class="mb-2 mr-2 w-32">{{ dropdown.label }}</label>
                 <select
                   v-model="dropdown.selectedOption"
                   class="border border-black rounded px-6 py-1"

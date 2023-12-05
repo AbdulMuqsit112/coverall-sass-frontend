@@ -11,7 +11,7 @@ export default {
   mounted() {
     setTimeout(() => {
       useSchoolStore().toggleAlert();
-    }, 1300);
+    }, 1600);
   },
   props: ['text', 'alertColor'],
   computed: {

@@ -114,7 +114,7 @@ export default {
       this.dropdownOptions = [];
       let classData = useSchoolStore().getTeacherClasses;
       const opt = classData.map((item) => ({
-        label: item.grade_name,
+        label: item.class_name,
         value: item.id,
       }));
       let option = {

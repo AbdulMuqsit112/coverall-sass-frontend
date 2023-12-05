@@ -17,7 +17,7 @@
         </div>
     </div>
       <div class="flex flex-col p-4 w-[29rem]" v-for="content in filteredData" :key="content">
-        <iframe src="https://www.youtube.com/embed/X3iFhLdWjqc" width="100%" height="300" frameborder="0" allowfullscreen></iframe>
+        <iframe :src="content.embed_code" width="100%" height="300" frameborder="0" allowfullscreen></iframe>
         <p class="font-black text-sm ml-1">{{ content.video_details }}</p>
         <p class="ml-1 text-xs">{{ content.teacher_name }} | {{ content.class_name }}</p>
       </div>
